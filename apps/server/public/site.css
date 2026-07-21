@@ -5,7 +5,7 @@
 .site-head{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.92);
   backdrop-filter:saturate(140%) blur(8px);border-bottom:1px solid var(--line)}
 .site-head .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
-.brand{display:flex;flex-direction:column;line-height:1}
+.brand{display:flex;flex-direction:column;line-height:1;color:inherit;cursor:pointer}
 .brand .n{font-family:'Playfair Display',serif;font-size:20px;font-weight:700;letter-spacing:-.01em}
 .brand .t{font-size:9.5px;letter-spacing:.28em;text-transform:uppercase;color:var(--muted);margin-top:3px}
 .site-nav{display:flex;align-items:center;gap:26px}
