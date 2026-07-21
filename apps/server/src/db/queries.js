@@ -99,6 +99,18 @@ export async function tankRiseByRef(client, tankRef, sinceIso) {
   return rows[0] || null;
 }
 
+/** Max pump current in a window for a pump that SHARES the given tank. Used to
+ *  reject windmill-performance windows contaminated by the pump's water. */
+export async function pumpMaxCurrentSharingTank(client, tankRef, sinceIso) {
+  const { rows } = await client.query(
+    `SELECT max(r.value) AS max_current
+       FROM reading r JOIN sensor s ON s.id = r.sensor_id
+       JOIN equipment e ON e.id = s.equipment_id
+      WHERE e.kind='pump' AND e.fills_tank=$1 AND s.kind='pump_current' AND r.ts >= $2`,
+    [tankRef, sinceIso]);
+  return rows[0]?.max_current ?? null;
+}
+
 export async function fieldMeta(client, fieldId) {
   const { rows } = await client.query(
     `SELECT id, name, lat, lon, alert_policy FROM field WHERE id = $1`, [fieldId]

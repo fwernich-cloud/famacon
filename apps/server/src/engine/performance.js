@@ -66,6 +66,7 @@ export function computeWindowPerformance({ strokes, D_cm, carrera_cm, eta, realL
 
 import {
   windmillConfigFull, tankGeometryByRef, strokesSum, tankRiseByRef,
+  pumpMaxCurrentSharingTank,
 } from '../db/queries.js';
 
 /**
@@ -89,6 +90,14 @@ export async function computePerformanceForWindmill(client, equipmentId, sinceIs
     return { mode: 'trend_pending_geometry', reason: 'geometría del tanque a confirmar',
       geomPerStroke: geometricLitersPerStroke(D_cm, cfg.carrera_cm), strokes };
   }
+  // Shared-tank rule: if a pump shares this tank and ran during the window, the
+  // rise includes the pump's water → the windmill would read falsely high. Reject
+  // the window (clean window = tank rises AND pump current ≈ 0).
+  const pumpMax = await pumpMaxCurrentSharingTank(client, cfg.fills_tank, sinceIso);
+  if (pumpMax != null && pumpMax > 0.2) {
+    return { mode: 'no_clean_window', reason: 'la bomba del tanque compartido estuvo andando en la ventana' };
+  }
+
   const area = tankAreaM2(geom);
   const deltaPct = rise && rise.first_v != null && rise.last_v != null ? rise.last_v - rise.first_v : null;
   if (deltaPct == null || deltaPct <= 0) {

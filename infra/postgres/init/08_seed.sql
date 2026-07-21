@@ -18,12 +18,13 @@ INSERT INTO gateway (id, tenant_id, field_id, ext_ref, hardware_profile, expecte
    'a0000000-0000-0000-0000-0000000000f1',
    'GW-01', 'generic-json@1', 1800, -75);
 
--- Equipment: 3 windmills + 1 electric pump. Each fills its own tank (a confirmar si comparten).
+-- Equipment: 4 windmills + 1 electric pump. BE-01 SHARES tank_01 with MOL-01.
 INSERT INTO equipment (id, tenant_id, field_id, kind, name, fills_tank) VALUES
   ('a0000000-0000-0000-0000-000000000101','a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','windmill','MOL-01','tank_01'),
   ('a0000000-0000-0000-0000-000000000102','a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','windmill','MOL-02','tank_02'),
   ('a0000000-0000-0000-0000-000000000103','a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','windmill','MOL-03','tank_03'),
-  ('a0000000-0000-0000-0000-000000000201','a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','pump','BE-01','tank_04');
+  ('a0000000-0000-0000-0000-000000000104','a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','windmill','MOL-04','tank_04'),
+  ('a0000000-0000-0000-0000-000000000201','a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','pump','BE-01','tank_01');
 
 -- Sensors. Tank ultrasonic every ~30 min; stroke counter every ~3 h; CT with tank cadence.
 INSERT INTO sensor (tenant_id, field_id, gateway_id, equipment_id, ext_ref, kind, tank_ref, expected_period_s) VALUES
@@ -33,8 +34,9 @@ INSERT INTO sensor (tenant_id, field_id, gateway_id, equipment_id, ext_ref, kind
   ('a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','a0000000-0000-0000-0000-0000000000e1',NULL,'TQ-02-nivel','tank_level','tank_02',1800),
   ('a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','a0000000-0000-0000-0000-0000000000e1','a0000000-0000-0000-0000-000000000103','MOL-03-golpes','windmill_strokes',NULL,10800),
   ('a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','a0000000-0000-0000-0000-0000000000e1',NULL,'TQ-03-nivel','tank_level','tank_03',1800),
-  ('a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','a0000000-0000-0000-0000-0000000000e1','a0000000-0000-0000-0000-000000000201','BE-01-corriente','pump_current',NULL,1800),
-  ('a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','a0000000-0000-0000-0000-0000000000e1',NULL,'TQ-04-nivel','tank_level','tank_04',1800);
+  ('a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','a0000000-0000-0000-0000-0000000000e1','a0000000-0000-0000-0000-000000000104','MOL-04-golpes','windmill_strokes',NULL,10800),
+  ('a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','a0000000-0000-0000-0000-0000000000e1',NULL,'TQ-04-nivel','tank_level','tank_04',1800),
+  ('a0000000-0000-0000-0000-000000000001','a0000000-0000-0000-0000-0000000000f1','a0000000-0000-0000-0000-0000000000e1','a0000000-0000-0000-0000-000000000201','BE-01-corriente','pump_current',NULL,1800);
 
 -- Tank geometry placeholders (a confirmar ~Lun 27/7). Structure exists; Item C fills numbers.
 INSERT INTO tank_geometry (tenant_id, field_id, tank_ref, shape, diameter_mm, height_mm) VALUES
@@ -68,7 +70,8 @@ INSERT INTO wheel_spec (tenant_id, wheel_ft, carrera_cm) VALUES
 INSERT INTO windmill_config (equipment_id, tenant_id, wheel_ft, cylinder_nominal, eta_base, notes) VALUES
   ('a0000000-0000-0000-0000-000000000101','a0000000-0000-0000-0000-000000000001', 8, NULL, NULL, 'Cilindro y η a confirmar'),
   ('a0000000-0000-0000-0000-000000000102','a0000000-0000-0000-0000-000000000001', 8, NULL, NULL, 'Cilindro y η a confirmar'),
-  ('a0000000-0000-0000-0000-000000000103','a0000000-0000-0000-0000-000000000001', 8, NULL, NULL, 'Cilindro y η a confirmar');
+  ('a0000000-0000-0000-0000-000000000103','a0000000-0000-0000-0000-000000000001', 8, NULL, NULL, 'Cilindro y η a confirmar'),
+  ('a0000000-0000-0000-0000-000000000104','a0000000-0000-0000-0000-000000000001', 8, NULL, NULL, 'Cilindro y η a confirmar');
 
 -- Recipient #1 (Federico) with consent on file (§6.5 / NFR5).
 INSERT INTO recipient (id, tenant_id, name, phone_e164) VALUES
