@@ -3,48 +3,173 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Famacon Control — Tablero</title>
+<title>Famacon Control — El agua de tu campo, bajo control</title>
+<meta name="description" content="Monitoreo remoto de molinos y bombas para campos ganaderos. Cruzamos el nivel del tanque con el estado del equipo y avisamos por WhatsApp solo cuando hay que actuar.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/app.css">
+<link rel="stylesheet" href="/site.css">
 </head>
 <body>
-<header class="topbar"><div class="wrap">
-  <div><div class="eyebrow">Famacon Control</div><h1>Tablero interno</h1></div>
-  <nav class="nav"><a href="/" class="active">Tablero</a><a href="/admin.html">Administración</a></nav>
+
+<header class="site-head"><div class="wrap">
+  <div class="brand"><span class="n">Famacon&nbsp;Control</span><span class="t">Monitoreo de campo</span></div>
+  <nav class="site-nav">
+    <a href="#problema">El problema</a>
+    <a href="#sistema">El sistema</a>
+    <a href="#como">Cómo funciona</a>
+    <a href="/dashboard.html" class="btn">Ingresar</a>
+  </nav>
 </div></header>
 
-<main class="wrap">
-  <section>
-    <div class="sec-head"><h2 id="fieldName">Campo</h2><div id="gwStatus" class="mono muted"></div></div>
-    <div id="equipment" class="grid cols-3"></div>
-  </section>
+<!-- HERO -->
+<section class="hero"><div class="wrap">
+  <div>
+    <div class="eyebrow">Molinos y bombas · Campos ganaderos</div>
+    <div class="pre">El agua es vida en el campo.</div>
+    <h1>Te avisamos cuando<br>deja de llegar</h1>
+    <p class="sub">No medimos solo el tanque. <b>Cruzamos el nivel del tanque con el estado del equipo</b> que lo llena — y hablamos solo cuando hay algo que hacer.</p>
+    <div class="cta">
+      <a href="/dashboard.html" class="btn">Ver el tablero</a>
+      <a href="#sistema" class="arrow-link">Cómo lo hacemos <span class="a">→</span></a>
+    </div>
+    <div class="rule"></div>
+    <div class="eyebrow" style="color:rgba(255,255,255,.5)">El silencio es parte del producto</div>
+  </div>
+  <div class="art">
+    <div class="cap">Diagnóstico cruzado</div>
+    <svg viewBox="0 0 320 240" width="100%" fill="none" stroke-linecap="round">
+      <!-- windmill -->
+      <line x1="60" y1="70" x2="60" y2="180" stroke="rgba(255,255,255,.5)" stroke-width="2"/>
+      <g stroke="var(--accent-lite)" stroke-width="2">
+        <line x1="60" y1="60" x2="60" y2="30"/><line x1="60" y1="60" x2="88" y2="70"/>
+        <line x1="60" y1="60" x2="34" y2="74"/><line x1="60" y1="60" x2="80" y2="42"/>
+        <circle cx="60" cy="60" r="4" fill="var(--accent-lite)"/>
+      </g>
+      <!-- pipe -->
+      <path d="M60 180 H150" stroke="rgba(255,255,255,.35)" stroke-width="2"/>
+      <!-- tank -->
+      <rect x="150" y="110" width="90" height="80" stroke="rgba(255,255,255,.45)" stroke-width="2"/>
+      <rect x="150" y="150" width="90" height="40" fill="var(--accent)" opacity=".35"/>
+      <path d="M150 150 H240" stroke="var(--accent-lite)" stroke-width="2"/>
+      <text x="195" y="205" fill="rgba(255,255,255,.55)" font-family="JetBrains Mono" font-size="10" text-anchor="middle">TANQUE</text>
+      <!-- alert -->
+      <g transform="translate(255,60)">
+        <rect x="0" y="0" width="56" height="40" rx="0" stroke="var(--accent-lite)" stroke-width="2"/>
+        <path d="M10 40 l0 12 l14 -12" stroke="var(--accent-lite)" stroke-width="2" fill="none"/>
+        <line x1="12" y1="14" x2="44" y2="14" stroke="rgba(255,255,255,.6)" stroke-width="2"/>
+        <line x1="12" y1="24" x2="36" y2="24" stroke="rgba(255,255,255,.4)" stroke-width="2"/>
+      </g>
+      <path d="M240 130 C 270 120, 280 110, 283 100" stroke="rgba(255,255,255,.3)" stroke-width="1.5" stroke-dasharray="3 4"/>
+    </svg>
+  </div>
+</div></section>
 
-  <section>
-    <div class="sec-head"><h2>Nivel de tanque vs golpes del molino</h2>
-      <select id="tankSel" style="width:auto"></select></div>
-    <div class="card"><div id="chart"></div></div>
-  </section>
+<div class="creds"><div class="wrap">
+  <span><b>Famacon S.A.</b> — Molinos y bombas desde 1981</span>
+  <span>Verónica · Buenos Aires · Argentina</span>
+  <span>WhatsApp Business API oficial</span>
+</div></div>
 
-  <section>
-    <div class="sec-head"><h2>Alertas abiertas</h2><span class="eyebrow" id="alertCount"></span></div>
-    <div id="alerts"></div>
-  </section>
+<!-- PROBLEM -->
+<section id="problema"><div class="wrap">
+  <div class="lead">
+    <div class="eyebrow">El problema</div>
+    <h2>Un equipo roto no manda un error.<br>Simplemente deja de reportar.</h2>
+    <p>Una bomba cortada o un sensor sin batería deja de mandar señal. Si la alerta solo reacciona a valores fuera de rango, ese silencio nunca dispara nada — y en un campo remoto puede significar animales sin agua durante días. La alerta más importante suele ser la <b>ausencia</b> de datos.</p>
+  </div>
+</div></section>
 
-  <section>
-    <div class="sec-head"><h2>Rendimiento de molinos</h2><span class="eyebrow">Fundación (nivel 3 = fase 2)</span></div>
-    <div id="performance" class="grid cols-3"></div>
-  </section>
+<!-- THE SYSTEM: cross diagnosis -->
+<section id="sistema" class="bg-alt"><div class="wrap">
+  <div class="lead">
+    <div class="eyebrow">El diferencial</div>
+    <h2>Qué pasa, y por qué</h2>
+    <p>Medir el tanque ya existe. El valor está en cruzarlo con el estado del equipo que lo llena. Tres situaciones, una sola regla:</p>
+  </div>
+  <div class="situations">
+    <div class="sit">
+      <div class="n">01</div><h3>Tanque bien · equipo andando</h3>
+      <p>Todo en orden. No hay nada que hacer.</p>
+      <div class="verdict silence">Silencio</div>
+    </div>
+    <div class="sit">
+      <div class="n">02</div><h3>Tanque bajando · equipo andando</h3>
+      <p>Normal: los animales están tomando agua.</p>
+      <div class="verdict silence">Silencio</div>
+    </div>
+    <div class="sit urgent">
+      <div class="n">03</div><h3>Tanque bajando · equipo parado</h3>
+      <p>El tanque se vacía sin reposición. Hay que ir.</p>
+      <div class="verdict alarm">Aviso urgente</div>
+    </div>
+  </div>
+</div></section>
 
-  <section>
-    <div class="sec-head"><h2>Envíos de WhatsApp</h2><span class="eyebrow">Registro de entrega</span></div>
-    <div id="messages"></div>
-  </section>
+<!-- MANIFESTO band -->
+<section class="band"><div class="wrap">
+  <div class="eyebrow">La filosofía</div>
+  <h2>El sistema <em>solo habla</em> cuando hay algo que hacer.</h2>
+  <p>Una herramienta que alarma por cada cambio entrena al productor a ignorarla. Esta se gana la confianza quedándose callada hasta que importa.</p>
+</div></section>
 
-  <div class="foot">Herramienta interna de verificación (solo lectura) · Famacon Control</div>
-</main>
+<!-- FEATURES -->
+<section><div class="wrap">
+  <div class="lead"><div class="eyebrow">Qué incluye</div><h2>Pensado para el campo real</h2></div>
+  <div class="features">
+    <div class="feat"><div class="k">Watchdog</div><h3>Detecta la ausencia</h3><p>Distingue un equipo caído de un corte de señal de zona. La cobertura rural es irregular: no gritamos por algo esperable.</p></div>
+    <div class="feat"><div class="k">WhatsApp</div><h3>Aviso con consentimiento</h3><p>API oficial de Meta, con plantillas aprobadas y consentimiento auditable por destinatario. Cumple la Ley 25.326.</p></div>
+    <div class="feat"><div class="k">Historial</div><h3>Toda la historia, siempre</h3><p>Cada lectura se guarda para detectar el desgaste del cuero del molino mes a mes. La historia es el producto.</p></div>
+    <div class="feat"><div class="k">Datos</div><h3>Aislados por productor</h3><p>Cada campo ve solo lo suyo, desde el día uno. Responsabilidad legal sobre datos ajenos, no solo prolijidad.</p></div>
+  </div>
+</div></section>
 
-<script src="/dashboard.js"></script>
+<!-- HOW IT WORKS -->
+<section id="como" class="bg-alt"><div class="wrap">
+  <div class="lead"><div class="eyebrow">Cómo funciona</div><h2>Del sensor al WhatsApp</h2></div>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div><h3>El campo mide</h3><p>Sensores de nivel de tanque, golpes del molino y corriente de bomba toman datos en cada equipo.</p></div></div>
+    <div class="step"><div class="num">2</div><div><h3>La antena transmite</h3><p>El gateway 4G junta las lecturas y las manda al servidor cada pocas horas, por red celular.</p></div></div>
+    <div class="step"><div class="num">3</div><div><h3>El motor diagnostica</h3><p>Cruza tanque con equipo, vigila la ausencia de datos y decide si corresponde avisar o quedarse en silencio.</p></div></div>
+    <div class="step"><div class="num">4</div><div><h3>Avisa a quien tiene que saber</h3><p>Un WhatsApp con el diagnóstico y qué revisar, a hasta 5 destinatarios — solo cuando hace falta.</p></div></div>
+  </div>
+</div></section>
+
+<!-- CTA -->
+<section class="band"><div class="wrap">
+  <div class="eyebrow">Piloto en marcha</div>
+  <h2>El agua de tu campo, <em>bajo control</em></h2>
+  <p>El tablero interno muestra cada sensor, el diagnóstico cruzado y los avisos, en vivo.</p>
+  <a href="/dashboard.html" class="btn">Ingresar al tablero</a>
+</div></section>
+
+<!-- FOOTER -->
+<footer class="site-foot">
+  <div class="wrap">
+    <div class="fb">
+      <span class="n">Famacon Control</span>
+      <p>Monitoreo remoto de molinos y bombas para campos ganaderos. Un producto de Famacon S.A., fabricante de molinos de viento y bombas solares desde 1981.</p>
+    </div>
+    <div>
+      <h4>Producto</h4>
+      <a href="#problema">El problema</a>
+      <a href="#sistema">El diagnóstico cruzado</a>
+      <a href="#como">Cómo funciona</a>
+      <a href="/dashboard.html">Tablero interno</a>
+    </div>
+    <div>
+      <h4>Empresa</h4>
+      <a href="#">Famacon S.A.</a>
+      <a href="#">Verónica, Buenos Aires</a>
+      <a href="#">Argentina</a>
+    </div>
+  </div>
+  <div class="foot-bar"><div class="wrap">
+    <span>© 2026 Famacon S.A. — Todos los derechos reservados.</span>
+    <span>Datos personales protegidos · Ley 25.326</span>
+  </div></div>
+</footer>
+
 </body>
 </html>

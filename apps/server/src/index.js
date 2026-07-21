@@ -29,10 +29,14 @@ await fastify.register(webhookRoutes);
 await fastify.register(consentRoutes);
 await fastify.register(apiRoutes);
 
-// Item B/C UI — static files, Famacon-only (basic auth), in an encapsulated scope
-// so the auth hook never touches /health, /ingest, or /webhooks.
+// Static site + app. The landing page ("/") is PUBLIC; only the operator pages
+// (dashboard/admin) require login. /api and /admin/* enforce their own auth.
 await fastify.register(async (ui) => {
-  ui.addHook('onRequest', basicAuth);
+  ui.addHook('onRequest', (req, reply, done) => {
+    const p = (req.raw.url || '').split('?')[0];
+    if (p === '/dashboard.html' || p === '/admin.html') return basicAuth(req, reply, done);
+    done();
+  });
   await ui.register(fastifyStatic, { root: join(__dirname, '..', 'public') });
 });
 
