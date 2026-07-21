@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Famacon Control — Tablero</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <div><div class="eyebrow">Famacon Control</div><h1>Tablero interno</h1></div>
+  <nav class="nav"><a href="/" class="active">Tablero</a><a href="/admin.html">Administración</a></nav>
+</div></header>
+
+<main class="wrap">
+  <section>
+    <div class="sec-head"><h2 id="fieldName">Campo</h2><div id="gwStatus" class="mono muted"></div></div>
+    <div id="equipment" class="grid cols-3"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Nivel de tanque vs golpes del molino</h2>
+      <select id="tankSel" style="width:auto"></select></div>
+    <div class="card"><div id="chart"></div></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Alertas abiertas</h2><span class="eyebrow" id="alertCount"></span></div>
+    <div id="alerts"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Rendimiento de molinos</h2><span class="eyebrow">Fundación (nivel 3 = fase 2)</span></div>
+    <div id="performance" class="grid cols-3"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Envíos de WhatsApp</h2><span class="eyebrow">Registro de entrega</span></div>
+    <div id="messages"></div>
+  </section>
+
+  <div class="foot">Herramienta interna de verificación (solo lectura) · Famacon Control</div>
+</main>
+
+<script src="/dashboard.js"></script>
+</body>
+</html>

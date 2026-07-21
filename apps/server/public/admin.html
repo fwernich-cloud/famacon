@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Famacon Control — Administración</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<header class="topbar"><div class="wrap">
+  <div><div class="eyebrow">Famacon Control</div><h1>Administración de datos de producto</h1></div>
+  <nav class="nav"><a href="/">Tablero</a><a href="/admin.html" class="active">Administración</a></nav>
+</div></header>
+
+<main class="wrap">
+  <section>
+    <p class="muted">Estos números son de Famacon y viven en la base de datos, no en el código. Editalos acá; el motor los toma al instante.</p>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Cilindros — diámetro interno medido</h2><span class="eyebrow">4½" pendiente</span></div>
+    <div id="cylinders" class="grid cols-3"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Molinos — cilindro y η</h2><span class="eyebrow">η se calibra con cuero nuevo</span></div>
+    <div id="windmills" class="grid cols-3"></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Geometría de tanques</h2><span class="eyebrow">nivel → litros</span></div>
+    <div id="tanks" class="grid cols-3"></div>
+  </section>
+
+  <div class="foot" id="msg"></div>
+</main>
+
+<script src="/admin.js"></script>
+</body>
+</html>

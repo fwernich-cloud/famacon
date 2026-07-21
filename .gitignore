@@ -1,0 +1,21 @@
+# secrets & env
+.env
+.env.actual_backup
+*.local
+
+# node
+node_modules/
+dist/
+build/
+.vite/
+npm-debug.log*
+
+# data / backups (never in git)
+infra/backup/dumps/
+infra/mosquitto/data/
+infra/mosquitto/log/
+*.dump
+*.sql.gz
+
+# os
+.DS_Store
