@@ -2,7 +2,7 @@ const $ = (s) => document.querySelector(s);
 const fmt = (v, u = '') => v == null ? '—' : `${v}${u}`;
 const ago = (ts) => { if (!ts) return 'sin datos'; const m = (Date.now() - new Date(ts)) / 60000;
   return m < 60 ? `hace ${Math.round(m)} min` : `hace ${(m / 60).toFixed(1)} h`; };
-const stBadge = (s) => ({ running: '<span class="badge b-ok">Andando</span>',
+const stBadge = (s) => ({ running: '<span class="badge b-ok">Funcionando</span>',
   stopped: '<span class="badge b-danger">Parado</span>',
   unknown: '<span class="badge b-muted">Sin dato</span>' }[s] || `<span class="badge b-muted">${s}</span>`);
 
