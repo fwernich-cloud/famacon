@@ -15,22 +15,18 @@
 .site-nav .btn:hover{color:var(--accent)}
 @media(max-width:720px){.site-nav a:not(.btn){display:none}}
 
-/* Hero — full windmill in a right-anchored box whose left edge fades into the
-   dark; copy sits in the shared content container (aligned with header + sections). */
-.hero{position:relative;min-height:640px;display:flex;align-items:center;overflow:hidden;background:var(--dark);color:#fff}
-.hero-bg{position:absolute;top:0;right:0;bottom:0;width:min(72%,1180px);z-index:0;
-  background-repeat:no-repeat;background-position:right center;background-size:auto 100%;
-  -webkit-mask-image:linear-gradient(90deg, transparent 0, #000 46%);
-          mask-image:linear-gradient(90deg, transparent 0, #000 46%)}
+/* Hero — full-bleed photo (whole windmill visible); copy over a dark gradient,
+   aligned to the shared content container (header + sections). */
+.hero{position:relative;min-height:700px;display:flex;align-items:center;overflow:hidden;background:var(--dark);color:#fff}
+.hero-bg{position:absolute;inset:0;z-index:0;background-position:center;background-size:cover;background-repeat:no-repeat}
 .hero::after{content:"";position:absolute;inset:0;z-index:1;
-  background:linear-gradient(90deg, rgba(9,18,27,.96) 0%, rgba(9,18,27,.86) 28%, rgba(9,18,27,.5) 46%, rgba(9,18,27,0) 64%)}
+  background:linear-gradient(90deg, rgba(9,18,27,.92) 0%, rgba(9,18,27,.80) 26%, rgba(9,18,27,.48) 46%, rgba(9,18,27,.12) 66%, rgba(9,18,27,0) 82%)}
 .hero .wrap{position:relative;z-index:2;width:100%;padding:88px 28px}
 .hero .inner{max-width:560px}
 .hero .eyebrow{color:var(--accent-lite)}
 @media(max-width:860px){
   .hero{min-height:560px}
-  .hero-bg{width:100%;background-position:center;background-size:cover;
-    -webkit-mask-image:linear-gradient(180deg,#000,rgba(0,0,0,.4));mask-image:linear-gradient(180deg,#000,rgba(0,0,0,.4))}
+  .hero-bg{background-position:72% center}
   .hero::after{background:linear-gradient(rgba(9,18,27,.82),rgba(9,18,27,.72))}
   .hero .inner{max-width:100%}
 }
