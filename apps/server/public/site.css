@@ -15,18 +15,22 @@
 .site-nav .btn:hover{color:var(--accent)}
 @media(max-width:720px){.site-nav a:not(.btn){display:none}}
 
-/* Hero — full windmill shown (contain, right), copy on the dark left */
-.hero{position:relative;min-height:640px;display:flex;align-items:center;overflow:hidden;
-  color:#fff;background:var(--dark) url(/img/hero.jpg) right center/auto 100% no-repeat}
-.hero::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(95deg, rgba(9,18,27,.97) 0%, rgba(9,18,27,.82) 34%, rgba(9,18,27,.30) 58%, rgba(9,18,27,.05) 100%)}
-@media(max-width:820px){
-  .hero{min-height:560px;background-position:center;background-size:cover}
-  .hero::after{background:linear-gradient(rgba(9,18,27,.82),rgba(9,18,27,.72))}
-}
-.hero .wrap{position:relative;z-index:2;padding:96px 28px}
-.hero .inner{max-width:640px}
+/* Hero — full windmill; image left edge fades into the dark; copy left-aligned */
+.hero{position:relative;min-height:640px;display:flex;align-items:center;overflow:hidden;background:var(--dark);color:#fff}
+.hero-bg{position:absolute;inset:0;z-index:0;background-repeat:no-repeat;background-position:right center;background-size:auto 100%;
+  -webkit-mask-image:linear-gradient(90deg, transparent 3%, #000 47%);
+          mask-image:linear-gradient(90deg, transparent 3%, #000 47%)}
+.hero::after{content:"";position:absolute;inset:0;z-index:1;
+  background:linear-gradient(95deg, rgba(9,18,27,.90) 0%, rgba(9,18,27,.64) 30%, rgba(9,18,27,.22) 55%, rgba(9,18,27,0) 75%)}
+.hero-copy{position:relative;z-index:2;max-width:680px;padding:84px clamp(28px,5vw,96px)}
 .hero .eyebrow{color:var(--accent-lite)}
+@media(max-width:860px){
+  .hero{min-height:560px}
+  .hero-bg{background-position:center;background-size:cover;
+    -webkit-mask-image:linear-gradient(180deg,#000,rgba(0,0,0,.4));mask-image:linear-gradient(180deg,#000,rgba(0,0,0,.4))}
+  .hero::after{background:linear-gradient(rgba(9,18,27,.82),rgba(9,18,27,.72))}
+  .hero-copy{max-width:100%}
+}
 .hero h1{color:#fff;font-size:clamp(38px,5.4vw,66px);text-transform:uppercase;
   letter-spacing:-.015em;margin:14px 0 10px}
 .hero .pre{font-family:'Playfair Display',serif;font-style:italic;font-size:20px;color:var(--accent-lite);opacity:.9}
@@ -37,7 +41,6 @@
 .arrow-link{font:600 12px 'Inter',sans-serif;letter-spacing:.16em;text-transform:uppercase;color:#fff}
 .arrow-link:hover{color:var(--accent-lite)}
 .arrow-link .a{transition:.2s;display:inline-block}.arrow-link:hover .a{transform:translateX(4px)}
-@media(max-width:820px){.hero .wrap{grid-template-columns:1fr;gap:30px;padding:64px 28px}.hero .art{display:none}}
 
 /* Hero schematic */
 .art{border:1px solid rgba(255,255,255,.14);background:rgba(255,255,255,.03);padding:22px}
