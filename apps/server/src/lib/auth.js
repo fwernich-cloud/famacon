@@ -11,17 +11,12 @@ export function checkCredentials(user, password) {
   return safeEq(user, config.dashboard.user) && safeEq(password, config.dashboard.password);
 }
 
-// A request is authenticated if it carries a valid session cookie OR valid Basic
-// auth (kept so curl / programmatic callers still work). Returns the user or null.
+// Authentication is by SESSION COOKIE only. We deliberately do NOT accept HTTP
+// Basic auth: browsers cache Basic credentials for the session and would silently
+// re-authenticate after logout, making "Salir" useless. Programmatic callers log
+// in via POST /api/login and reuse the returned cookie.
 export function authUser(req) {
-  const fromCookie = verifySession(req.cookies?.[SESSION_COOKIE]);
-  if (fromCookie) return fromCookie;
-  const m = (req.headers.authorization || '').match(/^Basic (.+)$/);
-  if (m) {
-    const [user, pass] = Buffer.from(m[1], 'base64').toString().split(':');
-    if (checkCredentials(user, pass)) return user;
-  }
-  return null;
+  return verifySession(req.cookies?.[SESSION_COOKIE]) || null;
 }
 
 // For /api and admin endpoints: 401 when unauthenticated.
