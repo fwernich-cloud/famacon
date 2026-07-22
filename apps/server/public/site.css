@@ -60,7 +60,8 @@
 
 /* Split image + text */
 .split{display:grid;grid-template-columns:1fr 1fr;border:1px solid var(--line);margin-top:8px}
-.split .media{min-height:440px;background:var(--dark) center/cover no-repeat}
+.split .media{background:var(--dark);display:flex}
+.split .media img{display:block;width:100%;height:auto;margin:auto}
 .split .body{padding:52px 46px;display:flex;flex-direction:column;justify-content:center;background:var(--surface)}
 .split .body h2{font-size:clamp(26px,3vw,38px);margin:10px 0 14px}
 .split .body p{color:var(--muted);font-size:16px;margin-bottom:10px}
