@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Famacon Control — Ingresar</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css">
+<link rel="stylesheet" href="/site.css">
+</head>
+<body>
+
+<header class="site-head"><div class="wrap">
+  <a href="/" class="brand"><span class="n">Famacon&nbsp;Control</span><span class="t">Monitoreo de campo</span></a>
+  <nav class="site-nav"><a href="/">Volver al sitio</a></nav>
+</div></header>
+
+<main class="auth-main">
+  <div class="auth-card">
+    <div class="eyebrow">Acceso interno</div>
+    <h2>Ingresá al tablero</h2>
+    <form id="loginForm" autocomplete="on">
+      <div class="field"><label for="user">Usuario</label>
+        <input id="user" name="user" type="text" autocomplete="username" required autofocus></div>
+      <div class="field"><label for="password">Clave</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" required></div>
+      <button class="btn" type="submit">Ingresar</button>
+      <div class="err" id="err"></div>
+    </form>
+    <a class="back" href="/">← Volver al sitio</a>
+  </div>
+</main>
+
+<footer class="site-foot">
+  <div class="foot-bar"><div class="wrap">
+    <span>© 2026 Famacon S.A. — Todos los derechos reservados.</span>
+    <span>Acceso restringido · Datos protegidos · Ley 25.326</span>
+  </div></div>
+</footer>
+
+<script src="/login.js"></script>
+</body>
+</html>

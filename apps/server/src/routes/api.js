@@ -2,7 +2,7 @@ import { pool } from '../db/pool.js';
 import { withTenant } from '../db/withTenant.js';
 import { latestReadings, equipmentForField, fieldMeta } from '../db/queries.js';
 import { computePerformanceForWindmill } from '../engine/performance.js';
-import { basicAuth } from '../lib/basicAuth.js';
+import { requireApi } from '../lib/auth.js';
 
 // Resolve a field's tenant (via the SECURITY DEFINER list). Returns null if unknown.
 async function tenantOfField(fieldId) {
@@ -25,7 +25,7 @@ function equipmentState(eq, readings) {
 }
 
 export default async function apiRoutes(fastify) {
-  fastify.addHook('onRequest', basicAuth); // Famacon-only for the whole /api surface
+  fastify.addHook('onRequest', requireApi); // Famacon-only for the whole /api surface
 
   // ── Item B: read-only ────────────────────────────────────────────────────
   fastify.get('/api/fields', async () => {

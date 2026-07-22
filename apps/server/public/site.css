@@ -88,6 +88,18 @@
 .band h2 em{font-style:italic;color:var(--accent-lite)}
 .band p{color:rgba(255,255,255,.75);max-width:52ch;margin:0 auto 24px}
 
+/* Sign-in */
+.auth-main{min-height:calc(100vh - 68px);display:flex;align-items:center;justify-content:center;
+  padding:56px 28px;background:var(--bg)}
+.auth-card{width:100%;max-width:400px;background:var(--surface);border:1px solid var(--line);padding:40px 36px}
+.auth-card .eyebrow{margin-bottom:10px}
+.auth-card h2{font-size:27px;margin-bottom:22px}
+.auth-card .field{margin-bottom:16px}
+.auth-card .btn{width:100%;justify-content:center;text-align:center;margin-top:6px}
+.auth-card .err{color:var(--danger);font-size:13px;min-height:18px;margin-top:12px}
+.auth-card .back{display:block;margin-top:18px;font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.auth-card .back:hover{color:var(--accent)}
+
 /* Footer */
 .site-foot{background:#0b1a26;color:rgba(255,255,255,.7)}
 .site-foot .wrap{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding:64px 28px 30px}

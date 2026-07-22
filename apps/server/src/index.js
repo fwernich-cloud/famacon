@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
 import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
+import fastifyCookie from '@fastify/cookie';
 import { config, assertConfig } from './config/index.js';
 import { pool } from './db/pool.js';
 import healthRoutes from './routes/health.js';
@@ -9,7 +10,8 @@ import httpIngestRoutes from './ingestion/http.js';
 import webhookRoutes from './routes/webhooks.js';
 import consentRoutes from './routes/consent.js';
 import apiRoutes from './routes/api.js';
-import { basicAuth } from './lib/basicAuth.js';
+import authRoutes from './routes/auth.js';
+import { requirePage } from './lib/auth.js';
 import { startMqtt } from './ingestion/mqtt.js';
 import { startWorkers, onAlertsOpened } from './engine/queue.js';
 import { dispatchAlerts } from './whatsapp/dispatch.js';
@@ -23,18 +25,20 @@ const fastify = Fastify({
   trustProxy: true, // behind nginx — needed for real client IP (consent audit, NFR5)
 });
 
+await fastify.register(fastifyCookie);
 await fastify.register(healthRoutes);
 await fastify.register(httpIngestRoutes);
 await fastify.register(webhookRoutes);
+await fastify.register(authRoutes);
 await fastify.register(consentRoutes);
 await fastify.register(apiRoutes);
 
-// Static site + app. The landing page ("/") is PUBLIC; only the operator pages
-// (dashboard/admin) require login. /api and /admin/* enforce their own auth.
+// Static site + app. Landing ("/") and the sign-in page are PUBLIC; the operator
+// pages redirect to /login.html without a valid session. /api enforces its own 401.
 await fastify.register(async (ui) => {
   ui.addHook('onRequest', (req, reply, done) => {
     const p = (req.raw.url || '').split('?')[0];
-    if (p === '/dashboard.html' || p === '/admin.html') return basicAuth(req, reply, done);
+    if (p === '/dashboard.html' || p === '/admin.html') return requirePage(req, reply, done);
     done();
   });
   await ui.register(fastifyStatic, { root: join(__dirname, '..', 'public') });
