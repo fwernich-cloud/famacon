@@ -9,7 +9,7 @@ dist/
 build/
 .vite/
 npm-debug.log*
-
+/assets/
 # data / backups (never in git)
 infra/backup/dumps/
 infra/mosquitto/data/
