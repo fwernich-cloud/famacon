@@ -15,11 +15,15 @@
 .site-nav .btn:hover{color:var(--accent)}
 @media(max-width:720px){.site-nav a:not(.btn){display:none}}
 
-/* Hero — full-bleed photo with dark gradient overlay */
-.hero{position:relative;min-height:660px;display:flex;align-items:center;overflow:hidden;
-  color:#fff;background:var(--dark) center/cover no-repeat}
+/* Hero — full windmill shown (contain, right), copy on the dark left */
+.hero{position:relative;min-height:640px;display:flex;align-items:center;overflow:hidden;
+  color:#fff;background:var(--dark) url(/img/hero.jpg) right center/auto 100% no-repeat}
 .hero::after{content:"";position:absolute;inset:0;
-  background:linear-gradient(95deg, rgba(9,18,27,.90) 0%, rgba(9,18,27,.64) 44%, rgba(9,18,27,.12) 100%)}
+  background:linear-gradient(95deg, rgba(9,18,27,.97) 0%, rgba(9,18,27,.82) 34%, rgba(9,18,27,.30) 58%, rgba(9,18,27,.05) 100%)}
+@media(max-width:820px){
+  .hero{min-height:560px;background-position:center;background-size:cover}
+  .hero::after{background:linear-gradient(rgba(9,18,27,.82),rgba(9,18,27,.72))}
+}
 .hero .wrap{position:relative;z-index:2;padding:96px 28px}
 .hero .inner{max-width:640px}
 .hero .eyebrow{color:var(--accent-lite)}
