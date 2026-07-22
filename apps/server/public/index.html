@@ -130,7 +130,6 @@
   <div class="lead"><div class="eyebrow">En el campo</div><h2>Instalaciones reales</h2>
     <p>Molinos Huracán y Hércules trabajando — de la llanura al secano.</p></div>
   <div class="carousel">
-    <button class="nav prev" aria-label="Anterior">‹</button>
     <div class="track" id="track">
       <div class="slide"><img src="/img/car1.jpg" alt="Molino en el campo" loading="lazy"></div>
       <div class="slide"><img src="/img/car2.jpg" alt="Molino con tanque australiano" loading="lazy"></div>
@@ -143,7 +142,6 @@
       <div class="slide"><img src="/img/car9.jpg" alt="Molino reflejado en el agua" loading="lazy"></div>
       <div class="slide"><img src="/img/car10.jpg" alt="Molino Hércules" loading="lazy"></div>
     </div>
-    <button class="nav next" aria-label="Siguiente">›</button>
   </div>
 </div></section>
 
@@ -194,15 +192,11 @@
 </footer>
 
 <script>
-  // Carousel: arrows scroll by one slide width.
+  // Carousel: duplicate the slides once so the marquee loops seamlessly (infinite flow).
   (function () {
     var track = document.getElementById('track');
     if (!track) return;
-    var step = function () { var s = track.querySelector('.slide'); return s ? s.offsetWidth + 14 : 360; };
-    var prev = document.querySelector('.carousel .prev');
-    var next = document.querySelector('.carousel .next');
-    if (prev) prev.addEventListener('click', function () { track.scrollBy({ left: -step(), behavior: 'smooth' }); });
-    if (next) next.addEventListener('click', function () { track.scrollBy({ left: step(), behavior: 'smooth' }); });
+    track.innerHTML += track.innerHTML;
   })();
 </script>
 </body>
