@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 940 330" font-family="'Inter',system-ui,-apple-system,'Segoe UI',Roboto,sans-serif">
+  <rect x="0" y="0" width="940" height="330" fill="#ffffff"/>
+  <text x="24" y="40" fill="#0b1a2c" font-size="16" font-weight="700">El watchdog: cuando algo deja de hablar</text>
+  <text x="24" y="60" fill="#5a6b78" font-size="12.5">No solo avisamos cuando un valor está mal — también cuando un sensor se calla. El silencio se interpreta.</text>
+
+  <!-- card 1: equipment down -->
+  <g>
+    <rect x="24" y="86" width="286" height="216" rx="14" fill="#fdecec" stroke="#f3bcbc"/>
+    <text x="46" y="122" fill="#5a6b78" font-size="11" font-weight="600" letter-spacing=".05em">CASO 1</text>
+    <text x="46" y="150" fill="#b91c1c" font-size="16" font-weight="700">Equipo caído</text>
+    <text x="46" y="182" fill="#334" font-size="12.5">Un sensor deja de reportar,</text>
+    <text x="46" y="200" fill="#334" font-size="12.5">pero el gateway del campo</text>
+    <text x="46" y="218" fill="#334" font-size="12.5">sigue mandando datos.</text>
+    <line x1="46" y1="238" x2="288" y2="238" stroke="#f3bcbc"/>
+    <text x="46" y="262" fill="#b91c1c" font-size="12.5" font-weight="700">→ Avisamos</text>
+    <text x="46" y="282" fill="#5a6b78" font-size="12">El equipo está detenido.</text>
+  </g>
+
+  <!-- card 2: zone outage -->
+  <g>
+    <rect x="327" y="86" width="286" height="216" rx="14" fill="#fdf5e8" stroke="#f0d6a6"/>
+    <text x="349" y="122" fill="#5a6b78" font-size="11" font-weight="600" letter-spacing=".05em">CASO 2</text>
+    <text x="349" y="150" fill="#b45309" font-size="16" font-weight="700">Corte de zona</text>
+    <text x="349" y="182" fill="#334" font-size="12.5">Se calla el gateway entero:</text>
+    <text x="349" y="200" fill="#334" font-size="12.5">ningún sensor reporta.</text>
+    <text x="349" y="218" fill="#334" font-size="12.5">Es la señal, no los equipos.</text>
+    <line x1="349" y1="238" x2="591" y2="238" stroke="#f0d6a6"/>
+    <text x="349" y="262" fill="#b45309" font-size="12.5" font-weight="700">→ Corte de señal</text>
+    <text x="349" y="282" fill="#5a6b78" font-size="12">No disparamos falsas alarmas.</text>
+  </g>
+
+  <!-- card 3: weak signal / battery -->
+  <g>
+    <rect x="630" y="86" width="286" height="216" rx="14" fill="#eaf3fb" stroke="#c3ddf1"/>
+    <text x="652" y="122" fill="#5a6b78" font-size="11" font-weight="600" letter-spacing=".05em">CASO 3</text>
+    <text x="652" y="150" fill="#0369a1" font-size="16" font-weight="700">Señal o batería baja</text>
+    <text x="652" y="182" fill="#334" font-size="12.5">La batería de un sensor o la</text>
+    <text x="652" y="200" fill="#334" font-size="12.5">señal del campo se degradan</text>
+    <text x="652" y="218" fill="#334" font-size="12.5">antes de fallar.</text>
+    <line x1="652" y1="238" x2="894" y2="238" stroke="#c3ddf1"/>
+    <text x="652" y="262" fill="#0369a1" font-size="12.5" font-weight="700">→ Aviso preventivo</text>
+    <text x="652" y="282" fill="#5a6b78" font-size="12">Se resuelve antes del apagón.</text>
+  </g>
+</svg>

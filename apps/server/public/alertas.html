@@ -18,8 +18,17 @@
   <p>El motor no reacciona a cualquier número. Cruza el tanque con el equipo, mide tendencias y vigila los silencios. Solo avisa cuando hay algo que hacer.</p>
 </div></section>
 
-<!-- THREE LEVELS -->
+<!-- EL CRUCE (matrix) -->
 <section><div class="wrap">
+  <div class="lead"><div class="eyebrow">El cruce</div><h2>Tanque × equipo</h2>
+    <p>La misma caída de tanque significa cosas distintas según lo que hace el equipo que lo llena. El motor cruza las dos señales antes de decidir.</p></div>
+  <div class="diagram-wrap narrow"><div class="diagram-card">
+    <img class="diagram" src="/img/diagrams/cross.svg" alt="Matriz de diagnóstico: nivel del tanque cruzado con el estado del equipo y el veredicto de cada combinación" loading="lazy">
+  </div></div>
+</div></section>
+
+<!-- THREE LEVELS -->
+<section class="bg-alt"><div class="wrap">
   <div class="lead"><div class="eyebrow">Los tres niveles</div><h2>De un valor a un patrón</h2>
     <p>Cada nivel pide una lógica distinta. Definimos cuáles van en el piloto para no sub ni sobre-construir.</p></div>
   <div class="features">
@@ -30,18 +39,16 @@
 </div></section>
 
 <!-- WATCHDOG -->
-<section class="bg-alt"><div class="wrap">
+<section><div class="wrap">
   <div class="lead"><div class="eyebrow">El watchdog</div><h2>La alerta más importante es la ausencia</h2>
     <p>Muchas veces un equipo roto no manda un error: simplemente deja de reportar. Ese silencio, en un campo lejos, puede ser días sin agua. El watchdog distingue tres casos:</p></div>
-  <div class="situations">
-    <div class="sit urgent"><div class="n">01</div><h3>Equipo caído</h3><p>Un sensor deja de reportar pero el gateway sigue transmitiendo: el equipo está caído.</p><div class="verdict alarm">Aviso urgente</div></div>
-    <div class="sit"><div class="n">02</div><h3>Corte de zona</h3><p>Se calla el gateway entero: es corte de señal de la zona, no falla de equipo. No dispara falsa alarma.</p><div class="verdict" style="color:var(--warn)">Aviso de zona</div></div>
-    <div class="sit"><div class="n">03</div><h3>Señal debilitándose</h3><p>La señal viene cayendo antes del silencio: aviso preventivo distinto, posible corte próximo.</p><div class="verdict" style="color:var(--accent)">Preventivo</div></div>
-  </div>
+  <div class="diagram-wrap"><div class="diagram-card">
+    <img class="diagram" src="/img/diagrams/watchdog.svg" alt="Los tres casos del watchdog: equipo caído, corte de zona y señal o batería baja, con el veredicto de cada uno" loading="lazy">
+  </div></div>
 </div></section>
 
 <!-- COOLDOWN / SILENCE -->
-<section><div class="wrap">
+<section class="bg-alt"><div class="wrap">
   <div class="lead"><div class="eyebrow">Anti-saturación</div><h2>Un problema es un incidente, no mil avisos</h2></div>
   <ul class="info-list">
     <li><span class="t">Un aviso por incidente</span><span class="d">Un valor que sigue mal es un solo aviso abierto, no uno por cada lectura. Cuando se resuelve, se cierra.</span></li>

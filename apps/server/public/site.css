@@ -336,3 +336,10 @@
 /* steps + phone pairing on home */
 .how-grid{display:grid;grid-template-columns:1.12fr .88fr;gap:50px;align-items:center;margin-top:8px}
 @media(max-width:820px){.how-grid{grid-template-columns:1fr;gap:34px}.how-grid .ps-phone{order:-1}}
+
+/* ── Diagram card (SVG figures) ───────────────────────────────────────── */
+.diagram-wrap{max-width:980px;margin:30px auto 0}
+.diagram-wrap.narrow{max-width:740px}
+.diagram-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;
+  box-shadow:0 24px 58px -34px rgba(15,34,49,.45)}
+.diagram{display:block;width:100%;height:auto}
