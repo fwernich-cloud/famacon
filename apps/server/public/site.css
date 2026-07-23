@@ -257,3 +257,10 @@
 .form-grid textarea{min-height:130px;resize:vertical}
 .form-ok{color:var(--ok);font-size:14px;margin-top:10px;min-height:18px}
 @media(max-width:640px){.form-grid{grid-template-columns:1fr}}
+
+/* Legal / prose */
+.prose{max-width:760px}
+.prose h2{font-size:22px;margin:32px 0 10px}
+.prose p{color:var(--muted);font-size:15px;margin-bottom:12px}
+.prose ul{color:var(--muted);font-size:15px;margin:0 0 12px 20px}
+.prose li{margin-bottom:6px}

@@ -11,6 +11,7 @@ import webhookRoutes from './routes/webhooks.js';
 import consentRoutes from './routes/consent.js';
 import apiRoutes from './routes/api.js';
 import authRoutes from './routes/auth.js';
+import contactRoutes from './routes/contact.js';
 import { requirePage } from './lib/auth.js';
 import { startMqtt } from './ingestion/mqtt.js';
 import { startWorkers, onAlertsOpened } from './engine/queue.js';
@@ -30,6 +31,7 @@ await fastify.register(healthRoutes);
 await fastify.register(httpIngestRoutes);
 await fastify.register(webhookRoutes);
 await fastify.register(authRoutes);
+await fastify.register(contactRoutes);
 await fastify.register(consentRoutes);
 await fastify.register(apiRoutes);
 
