@@ -64,6 +64,39 @@
         m.b + '<span class="meta">' + m.t + ' <span class="ck">✓✓</span></span></div>';
     }).join('');
   }
+  var MIC = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M18 11a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.9V22h2v-3.1A8 8 0 0 0 20 11z"/></svg>';
+  // Smoothly auto-scroll a chat (ping-pong, pauses at ends, stops on hover).
+  function autoScroll(el, sb) {
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var dir = 1, hold = 70, hover = false, pos = 0;   // pos: float accumulator (scrollTop rounds)
+    el.addEventListener('mouseenter', function () { hover = true; });
+    el.addEventListener('mouseleave', function () { hover = false; pos = el.scrollTop; });
+    function paintSB() {
+      if (!sb) return;
+      var ch = el.clientHeight, max = el.scrollHeight - el.clientHeight;
+      var th = Math.max(26, ch * ch / el.scrollHeight);
+      var frac = max > 0 ? el.scrollTop / max : 0;
+      sb.style.height = th + 'px';
+      sb.style.top = (el.offsetTop + frac * (ch - th)) + 'px';
+    }
+    function tick() {
+      if (!reduce && !hover) {
+        if (hold > 0) hold--;
+        else {
+          var max = el.scrollHeight - el.clientHeight;
+          if (max > 2) {
+            pos += dir * 0.5;
+            if (pos >= max) { pos = max; dir = -1; hold = 120; }
+            else if (pos <= 0) { pos = 0; dir = 1; hold = 120; }
+            el.scrollTop = pos;
+          }
+        }
+      }
+      paintSB();
+      requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
 
   var path = location.pathname.replace(/\/index\.html?$/, '/').replace(/\.html$/, '') || '/';
   var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
@@ -152,9 +185,16 @@
       var sb = document.createElement('div'); sb.className = 'statusbar';
       sb.innerHTML = '<span class="time">9:41</span><span class="sys">' + STAT.cell + STAT.wifi + STAT.bat + '</span>';
       var isl = document.createElement('div'); isl.className = 'island';
-      // live scrolling chat (duplicated for a seamless loop)
       var wb = scr.querySelector('.wa-body');
-      if (wb) wb.innerHTML = '<div class="wa-track">' + chatHTML() + chatHTML() + '</div>';
+      if (wb) {
+        wb.innerHTML = '<div class="wa-track">' + chatHTML() + '</div>';
+        var ft = document.createElement('div'); ft.className = 'wa-foot';
+        ft.innerHTML = '<div class="field"><span>Mensaje</span><span class="clip">&#128206;</span></div>' +
+          '<div class="mic">' + MIC + '</div>';
+        wb.after(ft);
+        var sbi = document.createElement('div'); sbi.className = 'wa-sb'; scr.appendChild(sbi);
+        autoScroll(wb, sbi);
+      }
       scr.insertBefore(sb, scr.firstChild);
       scr.insertBefore(isl, scr.firstChild);
       var hi = document.createElement('div'); hi.className = 'home-ind'; scr.appendChild(hi);
