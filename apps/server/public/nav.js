@@ -139,7 +139,7 @@
     // Floating "Escribinos por WhatsApp" button (site-wide). Set WA_NUMBER to the
     // commercial number (country code, digits only, no + or spaces) to turn it into
     // a direct chat; until then it falls back to the contact form.
-    var WA_NUMBER = '';  // e.g. '5491122334455' — cuando Federico pase el número
+    var WA_NUMBER = '5491131796848';  // +54 9 11 3179-6848
     var WA_TEXT = 'Hola, quiero saber más sobre Famacon Control para mi campo.';
     if (!document.querySelector('.wa-fab')) {
       var fab = document.createElement('a');
