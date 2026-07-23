@@ -272,3 +272,20 @@
 .page-hero.photo{background-size:cover;background-position:center}
 .page-hero.photo::before{background:linear-gradient(90deg, rgba(9,18,27,.92) 0%, rgba(9,18,27,.78) 42%, rgba(9,18,27,.5) 100%)}
 .page-hero.photo .wrap{text-shadow:0 1px 16px rgba(0,0,0,.5)}
+
+/* Vertical infinite gallery (bottom → top) */
+.vgallery{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;height:820px;overflow:hidden;margin-top:22px;
+  -webkit-mask-image:linear-gradient(180deg,transparent,#000 7%,#000 93%,transparent);
+          mask-image:linear-gradient(180deg,transparent,#000 7%,#000 93%,transparent)}
+.vcol{overflow:hidden}
+.vtrack{display:flex;flex-direction:column;gap:14px;animation:vscroll linear infinite;will-change:transform}
+.vcol:nth-child(1) .vtrack{animation-duration:42s}
+.vcol:nth-child(2) .vtrack{animation-duration:54s}
+.vcol:nth-child(3) .vtrack{animation-duration:48s}
+.vgallery:hover .vtrack{animation-play-state:paused}
+.vtrack a{display:block;overflow:hidden;border:1px solid var(--line)}
+.vtrack img{width:100%;display:block;transition:transform .5s ease}
+.vtrack a:hover img{transform:scale(1.05)}
+@keyframes vscroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+@media(prefers-reduced-motion:reduce){.vtrack{animation:none}}
+@media(max-width:760px){.vgallery{grid-template-columns:repeat(2,1fr);height:640px}.vcol:nth-child(3){display:none}}

@@ -90,6 +90,8 @@
     var track = document.getElementById('track');
     if (track && !track.dataset.dup) { track.dataset.dup = '1'; track.innerHTML += track.innerHTML; }
 
+    document.querySelectorAll('.vtrack').forEach(function (t) { if (!t.dataset.dup) { t.dataset.dup = '1'; t.innerHTML += t.innerHTML; } });
+
     // FAQ accordion: single-open, smooth expand.
     document.querySelectorAll('.faq .acc-q').forEach(function (q) {
       q.addEventListener('click', function () {
