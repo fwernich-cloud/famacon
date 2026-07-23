@@ -224,3 +224,7 @@
 .info-list li .t{font-weight:600}
 .info-list li .d{color:var(--muted);font-size:15px}
 @media(max-width:640px){.info-list li{grid-template-columns:1fr;gap:4px}}
+
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:32px}
+.grid-2 h3{font-family:'Inter',sans-serif;font-weight:600}
+@media(max-width:760px){.grid-2{grid-template-columns:1fr;gap:26px}}

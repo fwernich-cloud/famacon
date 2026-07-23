@@ -87,6 +87,9 @@
         if (!wasOpen) li.classList.add('open');
       });
     });
+    var track = document.getElementById('track');
+    if (track && !track.dataset.dup) { track.dataset.dup = '1'; track.innerHTML += track.innerHTML; }
+
     document.addEventListener('click', function (e) {
       if (!e.target.closest('.has-drop')) document.querySelectorAll('.has-drop.open').forEach(function (x) { x.classList.remove('open'); });
     });
