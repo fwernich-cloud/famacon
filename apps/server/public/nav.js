@@ -104,7 +104,7 @@
     }).join('');
     var feat = n.feat ? '<div class="drop-feat"><div class="eyebrow">' + esc(n.feat.eyebrow) + '</div>' +
       '<h4>' + esc(n.feat.title) + '</h4><a class="btn" href="' + n.feat.cta[1] + '">' + esc(n.feat.cta[0]) + '</a></div>' : '';
-    return '<li class="has-drop"><button class="' + cls + '" aria-haspopup="true">' + esc(n.label) +
+    return '<li class="has-drop"><button class="' + cls + '" aria-haspopup="true" aria-expanded="false">' + esc(n.label) +
       ' <span class="caret">▾</span></button>' +
       '<div class="drop"><div class="wrap drop-inner"><div class="drop-cols">' + cols + '</div>' + feat + '</div></div></li>';
   }
@@ -112,7 +112,7 @@
   var header =
     '<header class="site-head" id="siteHead"><div class="wrap nav-wrap">' +
       '<a href="/" class="brand"><span class="n">Famacon&nbsp;Control</span><span class="t">Monitoreo de campo</span></a>' +
-      '<button class="nav-toggle" id="navToggle" aria-label="Abrir menú">☰</button>' +
+      '<button class="nav-toggle" id="navToggle" aria-label="Abrir menú" aria-expanded="false" aria-controls="mega">☰</button>' +
       '<nav class="mega" id="mega"><ul class="mega-nav">' + NAV.map(topLevel).join('') + '</ul>' +
       '<a href="/login" class="btn nav-cta">Ingresar</a></nav>' +
     '</div></header>';
@@ -136,9 +136,23 @@
     if (h) h.outerHTML = header;
     if (f) f.outerHTML = footer;
 
+    // Skip-to-content link + main landmark on the first content section.
+    if (!document.querySelector('.skip')) {
+      var skip = document.createElement('a');
+      skip.className = 'skip'; skip.href = '#contenido'; skip.textContent = 'Saltar al contenido';
+      document.body.insertBefore(skip, document.body.firstChild);
+    }
+    var head = document.getElementById('siteHead');
+    var first = head && head.nextElementSibling;
+    while (first && (first.classList.contains('creds') || first.tagName === 'SCRIPT')) first = first.nextElementSibling;
+    if (first && !document.getElementById('contenido')) { first.id = 'contenido'; first.setAttribute('tabindex', '-1'); }
+
     var toggle = document.getElementById('navToggle');
     var mega = document.getElementById('mega');
-    if (toggle && mega) toggle.addEventListener('click', function () { mega.classList.toggle('open'); });
+    if (toggle && mega) toggle.addEventListener('click', function () {
+      var open = mega.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open ? 'true' : 'false');
+    });
 
     // Touch/click: open a dropdown by clicking its top button (desktop uses hover via CSS).
     document.querySelectorAll('.has-drop > button').forEach(function (btn) {
@@ -146,8 +160,11 @@
         e.preventDefault();
         var li = btn.parentElement;
         var wasOpen = li.classList.contains('open');
-        document.querySelectorAll('.has-drop.open').forEach(function (x) { x.classList.remove('open'); });
-        if (!wasOpen) li.classList.add('open');
+        document.querySelectorAll('.has-drop.open').forEach(function (x) {
+          x.classList.remove('open');
+          var b = x.querySelector('button'); if (b) b.setAttribute('aria-expanded', 'false');
+        });
+        if (!wasOpen) { li.classList.add('open'); btn.setAttribute('aria-expanded', 'true'); }
       });
     });
     // Inject line icons into any element carrying data-icon.
@@ -213,10 +230,14 @@
 
     // FAQ accordion: single-open, smooth expand.
     document.querySelectorAll('.faq .acc-q').forEach(function (q) {
+      q.setAttribute('aria-expanded', q.parentElement.classList.contains('open') ? 'true' : 'false');
       q.addEventListener('click', function () {
         var acc = q.parentElement, open = acc.classList.contains('open');
-        acc.closest('.faq').querySelectorAll('.acc.open').forEach(function (x) { x.classList.remove('open'); });
-        if (!open) acc.classList.add('open');
+        acc.closest('.faq').querySelectorAll('.acc.open').forEach(function (x) {
+          x.classList.remove('open');
+          var b = x.querySelector('.acc-q'); if (b) b.setAttribute('aria-expanded', 'false');
+        });
+        if (!open) { acc.classList.add('open'); q.setAttribute('aria-expanded', 'true'); }
       });
     });
 
