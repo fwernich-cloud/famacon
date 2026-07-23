@@ -206,3 +206,21 @@
 .stat .num{font-family:'Playfair Display',serif;font-size:44px;color:var(--accent);line-height:1}
 .stat .lab{font-size:13px;color:var(--muted);margin-top:10px}
 @media(max-width:720px){.stats{grid-template-columns:1fr 1fr}}
+
+/* ── Interior pages ── */
+.page-hero{background:var(--dark);color:#fff;position:relative;overflow:hidden;padding:66px 0 56px}
+.page-hero::before{content:"";position:absolute;inset:0;background:radial-gradient(60% 120% at 82% 0%, rgba(14,165,233,.16), transparent 70%)}
+.page-hero .wrap{position:relative}
+.page-hero .eyebrow{color:var(--accent-lite)}
+.page-hero h1{color:#fff;font-size:clamp(32px,4.4vw,52px);text-transform:uppercase;letter-spacing:-.01em;margin:10px 0 12px;line-height:1.08}
+.page-hero p{color:rgba(255,255,255,.82);max-width:62ch;font-size:17px}
+.cols2{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--line);border:1px solid var(--line);margin-top:8px}
+.cols2 .col{background:var(--surface);padding:34px 32px}
+.cols2 .col h3{font-size:20px;margin:6px 0 10px}
+.cols2 .col p{color:var(--muted);font-size:15px}
+@media(max-width:760px){.cols2{grid-template-columns:1fr}}
+.info-list{list-style:none;margin-top:8px}
+.info-list li{border-top:1px solid var(--line);padding:18px 0;display:grid;grid-template-columns:170px 1fr;gap:20px}
+.info-list li .t{font-weight:600}
+.info-list li .d{color:var(--muted);font-size:15px}
+@media(max-width:640px){.info-list li{grid-template-columns:1fr;gap:4px}}

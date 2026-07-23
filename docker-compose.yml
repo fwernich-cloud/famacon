@@ -54,6 +54,8 @@ services:
       dockerfile: Dockerfile
     restart: unless-stopped
     env_file: .env
+    volumes:
+      - ./apps/server/public:/app/public:ro
     depends_on:
       postgres: { condition: service_healthy }
       redis: { condition: service_healthy }

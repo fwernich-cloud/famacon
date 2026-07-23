@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Cómo funciona — Famacon Control</title>
+<meta name="description" content="Del sensor al WhatsApp: cómo Famacon Control mide el campo, cruza el nivel del tanque con el estado del equipo y avisa solo cuando hay que actuar.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css"><link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section class="page-hero"><div class="wrap">
+  <div class="eyebrow">Cómo funciona</div>
+  <h1>Del sensor al WhatsApp</h1>
+  <p>El campo mide, la antena transmite, el sistema cruza el tanque con el equipo y decide si hay que avisar o quedarse en silencio. Sin pantallas para el productor: solo el aviso, cuando hace falta.</p>
+</div></section>
+
+<!-- STEPS -->
+<section><div class="wrap">
+  <div class="lead"><div class="eyebrow">El recorrido</div><h2>Cuatro pasos</h2></div>
+  <div class="steps">
+    <div class="step"><div class="num">1</div><div><h3>El campo mide</h3><p>Sensores en cada molino y tanque miden el nivel del agua, los golpes del molino y la corriente de la bomba. Batería y señal viajan con cada lectura.</p></div></div>
+    <div class="step"><div class="num">2</div><div><h3>La antena transmite</h3><p>El gateway 4G del campo junta las lecturas y las manda al servidor cada pocas horas, por red celular. Megabytes por mes, no gigas.</p></div></div>
+    <div class="step"><div class="num">3</div><div><h3>El sistema decide</h3><p>Cruza el nivel del tanque con el estado del equipo y aplica las reglas. Si todo está en orden, se queda en silencio.</p></div></div>
+    <div class="step"><div class="num">4</div><div><h3>Te avisa</h3><p>Un WhatsApp con qué pasa y qué revisar, a hasta 5 personas — solo cuando hace falta.</p></div></div>
+  </div>
+</div></section>
+
+<!-- FIELD EQUIPMENT -->
+<section class="bg-alt"><div class="wrap">
+  <div class="lead"><div class="eyebrow">El equipo del campo</div><h2>El hardware lo comprás hecho</h2>
+    <p>Famacon Control es software. El campo lleva sensores y una antena de un proveedor externo; el sistema recibe sus datos.</p></div>
+  <ul class="info-list">
+    <li><span class="t">Sensores</span><span class="d">Nivel de tanque (ultrasónico), golpes del molino, corriente de bomba (CT), batería y temperatura.</span></li>
+    <li><span class="t">Gateway 4G</span><span class="d">La antena del campo junta las lecturas y las envía por celular. Cadencia típica: cada ~3 h.</span></li>
+    <li><span class="t">Decoder enchufable</span><span class="d">Si cambiás de proveedor de hardware, se enchufa otro decoder — no se reescribe el sistema.</span></li>
+    <li><span class="t">Sin sensor, igual avisa</span><span class="d">La bomba solar se estima por irradiación (clima) cuando no lleva sensor de corriente.</span></li>
+  </ul>
+</div></section>
+
+<!-- CROSS DIAGNOSIS -->
+<section><div class="wrap">
+  <div class="lead"><div class="eyebrow">El cruce</div><h2>Tanque × equipo</h2>
+    <p>Medir el tanque ya existe. El valor está en cruzarlo con el estado del equipo que lo llena.</p></div>
+  <div class="situations">
+    <div class="sit"><div class="n">01</div><h3>Tanque bien · equipo funcionando</h3><p>Todo en orden.</p><div class="verdict silence">Silencio</div></div>
+    <div class="sit"><div class="n">02</div><h3>Tanque bajando · equipo funcionando</h3><p>Normal: los animales toman agua.</p><div class="verdict silence">Silencio</div></div>
+    <div class="sit urgent"><div class="n">03</div><h3>Tanque bajando · equipo parado</h3><p>El tanque se vacía sin reposición.</p><div class="verdict alarm">Aviso urgente</div></div>
+  </div>
+</div></section>
+
+<!-- WHAT YOU GET -->
+<section class="bg-alt"><div class="wrap">
+  <div class="lead"><div class="eyebrow">Qué recibís</div><h2>Vos recibís el aviso; nosotros vemos el detalle</h2></div>
+  <div class="cols2">
+    <div class="col"><div class="eyebrow">El productor</div><h3>Un WhatsApp claro</h3><p>Qué campo, qué equipo, qué pasa y qué revisar. Nada más — sin apps ni pantallas que aprender.</p></div>
+    <div class="col"><div class="eyebrow">Famacon</div><h3>Un tablero interno</h3><p>Lista de sensores, últimos valores, batería y el gráfico de tanque vs golpes, para verificar que todo mide bien.</p></div>
+  </div>
+</div></section>
+
+<!-- CTA -->
+<section class="band"><div class="wrap">
+  <div class="eyebrow">Piloto en marcha</div>
+  <h2>¿Lo querés en tu campo?</h2>
+  <p>Te mostramos el flujo completo funcionando y coordinamos el arranque.</p>
+  <a href="/contacto" class="btn">Solicitar demo</a>
+</div></section>
+
+<div id="site-footer"></div>
+<script src="/nav.js"></script>
+</body>
+</html>
