@@ -104,45 +104,61 @@
   function initTestimonials() {
     var stage = document.querySelector('[data-testi]');
     if (!stage || stage.dataset.built) return; stage.dataset.built = '1';
-    var track = document.createElement('div'); track.className = 'tstage-track';
-    TESTI.forEach(function (t) {
+    var n = TESTI.length;
+    function slideEl(t) {
       var s = document.createElement('div'); s.className = 'tslide';
       s.innerHTML = '<figure class="card"><div class="stars" aria-hidden="true">★★★★★</div>' +
         '<blockquote>“' + t.q + '”</blockquote>' +
         '<figcaption class="by"><img class="av" src="' + t.a + '" alt="" loading="lazy">' +
         '<span class="rule"></span><span class="nm">' + t.n + '</span><span class="role">' + t.r + '</span></figcaption></figure>';
-      track.appendChild(s);
-    });
+      return s;
+    }
+    // track = [clones] [reals] [clones] → seamless infinite loop in both directions
+    var track = document.createElement('div'); track.className = 'tstage-track';
+    var reals = TESTI.map(slideEl);
+    function addClones() { reals.forEach(function (s) { var c = s.cloneNode(true); c.setAttribute('aria-hidden', 'true'); track.appendChild(c); }); }
+    addClones(); reals.forEach(function (s) { track.appendChild(s); }); addClones();
     stage.appendChild(track);
+
     var controls = document.createElement('div'); controls.className = 'tcontrols';
     var prev = document.createElement('button'); prev.className = 'tnav prev'; prev.setAttribute('aria-label', 'Anterior'); prev.innerHTML = '‹';
     var dots = document.createElement('div'); dots.className = 'tdots';
     var next = document.createElement('button'); next.className = 'tnav next'; next.setAttribute('aria-label', 'Siguiente'); next.innerHTML = '›';
     controls.appendChild(prev); controls.appendChild(dots); controls.appendChild(next);
     stage.parentNode.appendChild(controls);
-    var slides = [].slice.call(track.children);
-    var idx = 0, timer = null;
+
+    var slides = [].slice.call(track.children);   // 3n
+    var pos = n, timer = null;                     // start on the first real slide
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
-    var dotEls = slides.map(function (_, i) {
+    var dotEls = reals.map(function (_, i) {
       var d = document.createElement('button'); d.setAttribute('aria-label', 'Testimonio ' + (i + 1));
-      d.addEventListener('click', function () { go(i, true); }); dots.appendChild(d); return d;
+      d.addEventListener('click', function () { go(n + i, true); }); dots.appendChild(d); return d;
     });
-    function center() {
-      var s = slides[idx];
+    function center(animate) {
+      if (!animate) track.style.transition = 'none';
+      var s = slides[pos];
       track.style.transform = 'translateX(' + (stage.clientWidth / 2 - (s.offsetLeft + s.offsetWidth / 2)) + 'px)';
-      slides.forEach(function (el, j) { el.classList.toggle('is-active', j === idx); });
-      dotEls.forEach(function (d, j) { d.classList.toggle('on', j === idx); d.setAttribute('aria-current', j === idx ? 'true' : 'false'); });
+      var logical = ((pos - n) % n + n) % n;
+      slides.forEach(function (el, j) { el.classList.toggle('is-active', j === pos); });
+      dotEls.forEach(function (d, j) { d.classList.toggle('on', j === logical); d.setAttribute('aria-current', j === logical ? 'true' : 'false'); });
+      if (!animate) { void track.offsetWidth; track.style.transition = ''; }
     }
-    function go(i, manual) { idx = (i + slides.length) % slides.length; center(); if (manual) play(); }
-    function play() { stop(); if (reduce) return; timer = setInterval(function () { go(idx + 1); }, 5200); }
+    function go(to, manual) { pos = to; center(true); if (manual) play(); }
+    // after each slide, if we've landed on a clone region, jump silently to its real twin
+    track.addEventListener('transitionend', function (e) {
+      if (e.propertyName !== 'transform') return;
+      if (pos >= 2 * n) { pos -= n; center(false); }
+      else if (pos < n) { pos += n; center(false); }
+    });
+    function play() { stop(); if (reduce) return; timer = setInterval(function () { go(pos + 1); }, 5200); }
     function stop() { if (timer) { clearInterval(timer); timer = null; } }
-    prev.addEventListener('click', function () { go(idx - 1, true); });
-    next.addEventListener('click', function () { go(idx + 1, true); });
+    prev.addEventListener('click', function () { go(pos - 1, true); });
+    next.addEventListener('click', function () { go(pos + 1, true); });
     stage.addEventListener('mouseenter', stop);
     stage.addEventListener('mouseleave', play);
-    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(center, 120); });
-    track.querySelectorAll('img').forEach(function (im) { im.addEventListener('load', center); });
-    center(); play();
+    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(function () { center(false); }, 120); });
+    track.querySelectorAll('img').forEach(function (im) { im.addEventListener('load', function () { center(false); }); });
+    center(false); play();
   }
 
   var path = location.pathname.replace(/\/index\.html?$/, '/').replace(/\.html$/, '') || '/';
