@@ -60,6 +60,21 @@
      image begins at 0 opacity and dissolves in — no hard geometric boundary. */
   -webkit-mask-image:linear-gradient(90deg, transparent 0 41%, rgba(0,0,0,.5) 55%, #000 72%);
           mask-image:linear-gradient(90deg, transparent 0 41%, rgba(0,0,0,.5) 55%, #000 72%)}
+/* Ken-Burns crossfade slideshow: 3 slides share the hero's mask/framing. */
+.hero .slide{opacity:0;transform-origin:right center;animation:heroKB 21s infinite;will-change:opacity,transform}
+.hero .slide.s2{animation-delay:7s}
+.hero .slide.s3{animation-delay:14s}
+@keyframes heroKB{
+  0%{opacity:0;transform:scale(1.02)}
+  5%{opacity:1}
+  33%{opacity:1}
+  40%{opacity:0;transform:scale(1.11)}
+  100%{opacity:0;transform:scale(1.11)}
+}
+@media(prefers-reduced-motion:reduce){
+  .hero .slide{animation:none;opacity:0}
+  .hero .slide.s1{opacity:1}
+}
 .hero::after{content:"";position:absolute;inset:0;z-index:1;
   background:linear-gradient(90deg, rgba(9,18,27,.94) 0%, rgba(9,18,27,.82) 28%, rgba(9,18,27,.5) 48%, rgba(9,18,27,.12) 68%, rgba(9,18,27,0) 82%)}
 .hero .wrap{position:relative;z-index:2;width:100%;padding:88px 28px}
