@@ -114,6 +114,28 @@
       el.insertBefore(d, el.firstChild);
     });
 
+    // Dress every .phone as a realistic iPhone: side buttons, Dynamic Island,
+    // iOS status bar (time · signal · wifi · battery) and the home indicator.
+    var STAT = {
+      cell: '<svg width="18" height="12" viewBox="0 0 18 12" aria-hidden="true"><rect x="0" y="8" width="3" height="4" rx="1"/><rect x="5" y="5.5" width="3" height="6.5" rx="1"/><rect x="10" y="3" width="3" height="9" rx="1"/><rect x="15" y="0" width="3" height="12" rx="1"/></svg>',
+      wifi: '<svg width="17" height="12" viewBox="0 0 17 12" aria-hidden="true"><path d="M8.5 2C5.4 2 2.6 3.2.6 5.2l1.5 1.6C3.7 5.2 6 4.1 8.5 4.1s4.8 1.1 6.4 2.7l1.5-1.6C14.4 3.2 11.6 2 8.5 2zm0 4.1c-1.8 0-3.4.7-4.6 1.9l1.6 1.6c.8-.8 1.9-1.3 3-1.3s2.2.5 3 1.3l1.6-1.6C11.9 6.8 10.3 6.1 8.5 6.1zm0 4c-.7 0-1.3.3-1.8.8L8.5 12l1.8-1.1c-.5-.5-1.1-.8-1.8-.8z"/></svg>',
+      bat: '<svg width="27" height="13" viewBox="0 0 27 13" aria-hidden="true"><rect x="1" y="1" width="22" height="11" rx="3.2" fill="none" stroke="#fff" stroke-opacity=".45" stroke-width="1"/><rect x="2.6" y="2.6" width="16.5" height="7.8" rx="1.6" fill="#fff"/><path d="M24.6 4.5c1 .3 1 3.7 0 4z" fill="#fff" opacity=".55"/></svg>',
+    };
+    document.querySelectorAll('.phone').forEach(function (ph) {
+      if (ph.dataset.iph) return; ph.dataset.iph = '1';
+      ['b-mute', 'b-vup', 'b-vdn', 'b-pow'].forEach(function (c) {
+        var i = document.createElement('i'); i.className = 'pb ' + c; ph.appendChild(i);
+      });
+      var scr = ph.querySelector('.screen'); if (!scr) return;
+      var old = scr.querySelector('.notch'); if (old) old.remove();
+      var sb = document.createElement('div'); sb.className = 'statusbar';
+      sb.innerHTML = '<span class="time">9:41</span><span class="sys">' + STAT.cell + STAT.wifi + STAT.bat + '</span>';
+      var isl = document.createElement('div'); isl.className = 'island';
+      scr.insertBefore(sb, scr.firstChild);
+      scr.insertBefore(isl, scr.firstChild);
+      var hi = document.createElement('div'); hi.className = 'home-ind'; scr.appendChild(hi);
+    });
+
     var track = document.getElementById('track');
     if (track && !track.dataset.dup) { track.dataset.dup = '1'; track.innerHTML += track.innerHTML; }
 
