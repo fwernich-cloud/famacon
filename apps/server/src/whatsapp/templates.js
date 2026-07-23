@@ -28,6 +28,21 @@ export function templateForSeverity(severity) {
   return TEMPLATES[severity] || TEMPLATES.warning;
 }
 
+// Business-initiated lead notification (new contact-form message → Famacon).
+// Needs a Meta-approved template "famacon_nuevo_lead" for LIVE send; dry-run logs
+// the text until the token is set. Body suggested:
+//   "Nueva consulta en la web — {{1}}\nTel: {{2}}\n{{3}}"
+export const LEAD_TEMPLATE = {
+  name: 'famacon_nuevo_lead',
+  language: 'es',
+  params: (l) => [l.name || 'sin nombre', l.phone || 'sin teléfono', (l.message || '').slice(0, 600)],
+};
+
+export function renderLeadText(l) {
+  return `Nueva consulta en la web\nNombre: ${l.name || '—'}\nTel: ${l.phone || '—'}` +
+    `${l.email ? `\nEmail: ${l.email}` : ''}\nTipo: ${l.audience || '—'}\n\n${l.message || ''}`;
+}
+
 /** Human-readable rendering (stored in the log; used by dry-run). */
 export function renderText(a) {
   const head = a.severity === 'urgent' ? '🚨 FAMACON CONTROL' : 'FAMACON CONTROL';

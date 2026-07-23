@@ -1,4 +1,4 @@
-import { templateForSeverity, renderText } from './templates.js';
+import { templateForSeverity, renderText, LEAD_TEMPLATE, renderLeadText } from './templates.js';
 
 // ── WhatsApp Business Cloud API client (direct, no BSP) ─────────────────────
 // Sends approved HSM templates via Meta's Graph API. When no token is configured
@@ -63,5 +63,43 @@ export async function sendAlertTemplate(toE164, alert, { fetchImpl = fetch, log 
     return { ok: true, id: data?.messages?.[0]?.id, dryRun: false, template: tpl.name, text };
   } catch (err) {
     return { ok: false, dryRun: false, error: err.message, template: tpl.name, text };
+  }
+}
+
+/**
+ * Notify Famacon by WhatsApp when a new contact-form lead arrives.
+ * Dry-run (log only) until WA_ACCESS_TOKEN + WA_PHONE_NUMBER_ID are set and the
+ * "famacon_nuevo_lead" template is approved. Fire-and-forget from the route.
+ */
+export async function sendLeadNotification(toE164, lead, { fetchImpl = fetch, log } = {}) {
+  const to = String(toE164 || '').replace(/[^\d]/g, '');
+  const tpl = LEAD_TEMPLATE;
+  const params = tpl.params(lead);
+  const text = renderLeadText(lead);
+  if (!to) return { ok: false, dryRun: isDryRun(), error: 'no notify number', text };
+
+  if (isDryRun()) {
+    log?.info({ to, template: tpl.name, name: lead.name, phone: lead.phone }, 'whatsapp LEAD notification DRY-RUN');
+    return { ok: true, id: `dryrun-lead-${Date.now()}`, dryRun: true, template: tpl.name, text };
+  }
+  const { token, phoneId } = cfg();
+  const body = {
+    messaging_product: 'whatsapp', to, type: 'template',
+    template: {
+      name: tpl.name, language: { code: tpl.language },
+      components: [{ type: 'body', parameters: params.map((t) => ({ type: 'text', text: String(t) })) }],
+    },
+  };
+  try {
+    const res = await fetchImpl(`${GRAPH}/${phoneId}/messages`, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(body), signal: AbortSignal.timeout(10000),
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok) return { ok: false, dryRun: false, error: data?.error?.message || `HTTP ${res.status}`, text };
+    return { ok: true, id: data?.messages?.[0]?.id, dryRun: false, text };
+  } catch (err) {
+    return { ok: false, dryRun: false, error: err.message, text };
   }
 }

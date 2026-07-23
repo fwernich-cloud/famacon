@@ -1,4 +1,8 @@
 import { pool } from '../db/pool.js';
+import { sendLeadNotification } from '../whatsapp/client.js';
+
+// Where new leads are notified by WhatsApp (Famacon's commercial number).
+const LEAD_NOTIFY_TO = process.env.LEAD_NOTIFY_TO || '5491131796848';
 
 // Public contact form endpoint. Stores inbound leads. Honeypot field 'website'
 // must stay empty (basic bot filter).
@@ -25,6 +29,13 @@ export default async function contactRoutes(fastify) {
       [req.body.name, req.body.email || null, req.body.phone || null,
        req.body.audience || null, req.body.message, req.ip]);
     req.log.info({ audience: req.body.audience }, 'contact message received');
+
+    // Notify Famacon by WhatsApp — fire-and-forget so a failed/slow send never
+    // blocks or fails the form response for the producer.
+    sendLeadNotification(LEAD_NOTIFY_TO, req.body, { log: req.log })
+      .then((r) => req.log.info({ ok: r.ok, dryRun: r.dryRun, error: r.error }, 'lead WhatsApp notification'))
+      .catch((err) => req.log.error({ err: err.message }, 'lead WhatsApp notification threw'));
+
     return { ok: true };
   });
 }
