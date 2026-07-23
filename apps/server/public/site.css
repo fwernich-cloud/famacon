@@ -328,7 +328,8 @@
 .phone{position:relative;width:300px;padding:13px;margin:0 auto;
   background:linear-gradient(145deg,#42454b,#191a1e 42%,#2c2e33);
   border-radius:56px;box-shadow:0 46px 100px -34px rgba(15,34,49,.7),inset 0 0 0 2px #0a0b0d,0 0 0 1px rgba(255,255,255,.04)}
-.phone .screen{position:relative;background:#075e54;border-radius:44px;overflow:hidden;isolation:isolate}
+.phone .screen{position:relative;background:#075e54;border-radius:44px;overflow:hidden;isolation:isolate;
+  height:590px;display:flex;flex-direction:column}
 .phone .notch{display:none}
 /* physical side buttons */
 .phone .pb{position:absolute;background:linear-gradient(90deg,#0d0e10,#3a3c41);z-index:1}
@@ -340,7 +341,7 @@
 .phone .island{position:absolute;top:13px;left:50%;transform:translateX(-50%);width:92px;height:27px;background:#000;border-radius:16px;z-index:6}
 .phone .island::after{content:"";position:absolute;right:9px;top:50%;transform:translateY(-50%);width:7px;height:7px;border-radius:50%;background:#0b1620;box-shadow:inset 0 0 0 1px #14304a}
 /* iOS status bar (shares the WhatsApp green) */
-.phone .statusbar{display:flex;align-items:center;justify-content:space-between;
+.phone .statusbar{flex:none;display:flex;align-items:center;justify-content:space-between;
   padding:15px 22px 7px;background:#075e54;color:#fff;position:relative;z-index:4}
 .phone .statusbar .time{font-size:14px;font-weight:700;letter-spacing:.02em;font-variant-numeric:tabular-nums;padding-left:6px}
 .phone .statusbar .sys{display:flex;align-items:center;gap:6px}
@@ -348,14 +349,25 @@
 /* home indicator */
 .phone .home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);
   width:122px;height:5px;border-radius:3px;background:rgba(0,0,0,.3);z-index:6}
-.wa-head{background:#075e54;color:#fff;display:flex;align-items:center;gap:11px;padding:5px 13px 12px}
+.wa-head{flex:none;background:#075e54;color:#fff;display:flex;align-items:center;gap:11px;padding:5px 13px 12px;
+  box-shadow:0 1px 0 rgba(0,0,0,.12)}
 .wa-head .bk{font-size:20px;opacity:.9;margin:-2px -3px 0 0;line-height:1}
 .wa-head .av{width:36px;height:36px;border-radius:50%;background:#cfe9e4;color:#075e54;display:grid;place-items:center;font:700 17px/1 'Playfair Display',serif;flex:none}
 .wa-head .nm{font-size:14px;font-weight:600;line-height:1.15;display:flex;align-items:center;gap:5px}
 .wa-head .nm .vf{color:#8ff0c8;font-size:11px}
 .wa-head .st{font-size:10.5px;opacity:.82;margin-top:2px}
 .wa-head .ico{margin-left:auto;opacity:.85;font-size:14px;letter-spacing:8px}
-.wa-body{padding:16px 12px 40px;background:#e9e2db;min-height:340px}
+/* the chat scroll viewport — messages auto-scroll like a live conversation */
+.wa-body{flex:1;overflow:hidden;position:relative;background:#e9e2db;
+  background-image:radial-gradient(rgba(11,60,50,.03) 1px,transparent 1px);background-size:14px 14px;
+  -webkit-mask-image:linear-gradient(180deg,transparent 0,#000 5%,#000 91%,transparent 100%);
+          mask-image:linear-gradient(180deg,transparent 0,#000 5%,#000 91%,transparent 100%)}
+.wa-track{padding:0 12px;animation:waScroll 34s linear infinite;will-change:transform}
+.wa-msg.urgent{box-shadow:0 1px .6px rgba(11,20,26,.14),inset 3px 0 0 #dc2626}
+.wa-msg.urgent .hd{color:#b3261e}
+.phone:hover .wa-track{animation-play-state:paused}
+@keyframes waScroll{from{transform:translateY(0)}to{transform:translateY(-50%)}}
+@media(prefers-reduced-motion:reduce){.wa-track{animation:none}}
 .wa-day{text-align:center;margin-bottom:14px}
 .wa-day span{background:#d7e7ef;color:#5b7a8c;font-size:10px;padding:4px 11px;border-radius:8px;letter-spacing:.02em}
 .wa-msg{background:#fff;border-radius:10px;border-top-left-radius:2px;padding:9px 11px 7px;font-size:12.5px;line-height:1.55;color:#1c2b33;

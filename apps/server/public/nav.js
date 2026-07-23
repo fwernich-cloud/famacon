@@ -44,6 +44,27 @@
     signal: '<path d="M4 20V10"/><path d="M9 20V6"/><path d="M14 20v-9"/><path d="M19 20V4"/>',
   };
 
+  // A day of Famacon Control alerts — rendered into every phone as a live,
+  // auto-scrolling WhatsApp chat.
+  var CHAT = [
+    { day: 'HOY' },
+    { hd: 'Famacon Control · Aviso', t: '06:40', b: 'Campo Punta Indio<br><b>Molino MOL-02</b> — tanque tank_02 al 18%, por debajo del mínimo. Revisar el molino.' },
+    { hd: 'Famacon Control · Normalizado', t: '07:05', b: '<b>Molino MOL-02</b> funcionando. Tanque tank_02 subiendo.' },
+    { hd: 'Famacon Control · Aviso', t: '08:15', b: '<b>Molino MOL-04</b> — tanque bajando: 46% → 34% en 24 h, con el molino funcionando. Revisá cuero/válvula o el consumo del rodeo.' },
+    { hd: 'Famacon Control · Normalizado', t: '09:40', b: '<b>Molino MOL-01</b> volvió a bombear. Tanque tank_01 recuperando nivel.' },
+    { hd: 'Famacon Control · Aviso urgente', t: '11:02', u: true, b: '<b>Bomba BE-01</b> parada y tanque tank_01 bajando (31%). Sin reposición — revisar la bomba.' },
+    { hd: 'Famacon Control · Normalizado', t: '11:48', b: '<b>Bomba BE-01</b> en marcha. Tanque tank_01 recuperando.' },
+    { hd: 'Famacon Control · Preventivo', t: '14:20', b: 'Señal del campo debilitándose (RSSI −98 dBm). Posible corte próximo en la zona.' },
+    { hd: 'Famacon Control · Aviso', t: '16:30', b: 'Batería del sensor <b>TQ-03</b> baja (3,1 V). Conviene programar el cambio.' },
+  ];
+  function chatHTML() {
+    return CHAT.map(function (m) {
+      if (m.day) return '<div class="wa-day"><span>' + m.day + '</span></div>';
+      return '<div class="wa-msg' + (m.u ? ' urgent' : '') + '"><span class="hd">' + m.hd + '</span>' +
+        m.b + '<span class="meta">' + m.t + ' <span class="ck">✓✓</span></span></div>';
+    }).join('');
+  }
+
   var path = location.pathname.replace(/\/index\.html?$/, '/').replace(/\.html$/, '') || '/';
   var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
 
@@ -131,6 +152,9 @@
       var sb = document.createElement('div'); sb.className = 'statusbar';
       sb.innerHTML = '<span class="time">9:41</span><span class="sys">' + STAT.cell + STAT.wifi + STAT.bat + '</span>';
       var isl = document.createElement('div'); isl.className = 'island';
+      // live scrolling chat (duplicated for a seamless loop)
+      var wb = scr.querySelector('.wa-body');
+      if (wb) wb.innerHTML = '<div class="wa-track">' + chatHTML() + chatHTML() + '</div>';
       scr.insertBefore(sb, scr.firstChild);
       scr.insertBefore(isl, scr.firstChild);
       var hi = document.createElement('div'); hi.className = 'home-ind'; scr.appendChild(hi);
