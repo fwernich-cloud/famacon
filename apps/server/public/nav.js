@@ -90,6 +90,15 @@
     var track = document.getElementById('track');
     if (track && !track.dataset.dup) { track.dataset.dup = '1'; track.innerHTML += track.innerHTML; }
 
+    // FAQ accordion: single-open, smooth expand.
+    document.querySelectorAll('.faq .acc-q').forEach(function (q) {
+      q.addEventListener('click', function () {
+        var acc = q.parentElement, open = acc.classList.contains('open');
+        acc.closest('.faq').querySelectorAll('.acc.open').forEach(function (x) { x.classList.remove('open'); });
+        if (!open) acc.classList.add('open');
+      });
+    });
+
     document.addEventListener('click', function (e) {
       if (!e.target.closest('.has-drop')) document.querySelectorAll('.has-drop.open').forEach(function (x) { x.classList.remove('open'); });
     });
