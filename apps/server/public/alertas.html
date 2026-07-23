@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Diagnóstico y alertas — Famacon Control</title>
+<meta name="description" content="Los tres niveles de alerta y el watchdog de ausencia de datos: cómo Famacon Control decide cuándo avisar y cuándo quedarse en silencio.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css"><link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section class="page-hero"><div class="wrap">
+  <div class="eyebrow">Diagnóstico y alertas</div>
+  <h1>Cuándo hablar,<br>cuándo callar</h1>
+  <p>El motor no reacciona a cualquier número. Cruza el tanque con el equipo, mide tendencias y vigila los silencios. Solo avisa cuando hay algo que hacer.</p>
+</div></section>
+
+<!-- THREE LEVELS -->
+<section><div class="wrap">
+  <div class="lead"><div class="eyebrow">Los tres niveles</div><h2>De un valor a un patrón</h2>
+    <p>Cada nivel pide una lógica distinta. Definimos cuáles van en el piloto para no sub ni sobre-construir.</p></div>
+  <div class="features">
+    <div class="feat"><div class="k">Nivel 1 · Umbral</div><h3>Un valor cruza un límite</h3><p>Tanque por debajo del 20%, corriente de bomba en cero por X minutos. Directo y en el piloto.</p></div>
+    <div class="feat"><div class="k">Nivel 2 · Ventana</div><h3>Una tendencia en el tiempo</h3><p>El tanque cae más de 30% en menos de una hora: sospecha de fuga. En el piloto.</p></div>
+    <div class="feat"><div class="k">Nivel 3 · Patrón</div><h3>Comparado con su historia</h3><p>Desgaste del cuero del molino y salud del rodeo por consumo. Fase posterior — la base ya guarda la historia.</p></div>
+  </div>
+</div></section>
+
+<!-- WATCHDOG -->
+<section class="bg-alt"><div class="wrap">
+  <div class="lead"><div class="eyebrow">El watchdog</div><h2>La alerta más importante es la ausencia</h2>
+    <p>Muchas veces un equipo roto no manda un error: simplemente deja de reportar. Ese silencio, en un campo lejos, puede ser días sin agua. El watchdog distingue tres casos:</p></div>
+  <div class="situations">
+    <div class="sit urgent"><div class="n">01</div><h3>Equipo caído</h3><p>Un sensor deja de reportar pero el gateway sigue transmitiendo: el equipo está caído.</p><div class="verdict alarm">Aviso urgente</div></div>
+    <div class="sit"><div class="n">02</div><h3>Corte de zona</h3><p>Se calla el gateway entero: es corte de señal de la zona, no falla de equipo. No dispara falsa alarma.</p><div class="verdict" style="color:var(--warn)">Aviso de zona</div></div>
+    <div class="sit"><div class="n">03</div><h3>Señal debilitándose</h3><p>La señal viene cayendo antes del silencio: aviso preventivo distinto, posible corte próximo.</p><div class="verdict" style="color:var(--accent)">Preventivo</div></div>
+  </div>
+</div></section>
+
+<!-- COOLDOWN / SILENCE -->
+<section><div class="wrap">
+  <div class="lead"><div class="eyebrow">Anti-saturación</div><h2>Un problema es un incidente, no mil avisos</h2></div>
+  <ul class="info-list">
+    <li><span class="t">Un aviso por incidente</span><span class="d">Un valor que sigue mal es un solo aviso abierto, no uno por cada lectura. Cuando se resuelve, se cierra.</span></li>
+    <li><span class="t">Un aviso por tanque</span><span class="d">Si dos alertas caen sobre el mismo tanque (parada + fuga), se juntan en un solo mensaje.</span></li>
+    <li><span class="t">Tanque compartido</span><span class="d">Si el molino y la bomba llenan el mismo tanque, solo avisa cuando los dos están parados.</span></li>
+  </ul>
+</div></section>
+
+<!-- MANIFESTO -->
+<section class="band photo" style="background-image:url(/img/manifesto.jpg)"><div class="wrap">
+  <div class="eyebrow">La regla</div>
+  <h2>El sistema <em>solo habla</em> cuando hay algo que hacer.</h2>
+  <p>Una herramienta que alarma por cada cambio entrena al productor a ignorarla. Esta se gana la confianza quedándose callada hasta que importa.</p>
+</div></section>
+
+<!-- CTA -->
+<section class="band"><div class="wrap">
+  <div class="eyebrow">Piloto en marcha</div>
+  <h2>Velo funcionando</h2>
+  <p>Te mostramos el diagnóstico cruzado y el watchdog en vivo.</p>
+  <a href="/contacto" class="btn">Solicitar demo</a>
+</div></section>
+
+<div id="site-footer"></div>
+<script src="/nav.js"></script>
+</body>
+</html>

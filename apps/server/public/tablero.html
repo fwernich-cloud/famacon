@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>El tablero — Famacon Control</title>
+<meta name="description" content="El tablero interno de Famacon Control: sensores, últimos valores, batería, el gráfico de tanque vs golpes, alertas y el registro de envíos.">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="/app.css"><link rel="stylesheet" href="/site.css">
+</head>
+<body>
+<div id="site-header"></div>
+
+<section class="page-hero"><div class="wrap">
+  <div class="eyebrow">El tablero</div>
+  <h1>Ver que todo mide bien</h1>
+  <p>Una pantalla interna, de solo lectura, para que Famacon verifique el campo durante el piloto. No es la app del cliente: el productor solo recibe el WhatsApp.</p>
+  <div style="margin-top:22px"><a href="/login" class="btn">Ingresar al tablero</a></div>
+</div></section>
+
+<!-- WHAT IT SHOWS -->
+<section><div class="wrap">
+  <div class="lead"><div class="eyebrow">Qué muestra</div><h2>El campo, de un vistazo</h2></div>
+  <ul class="info-list">
+    <li><span class="t">Equipos y estado</span><span class="d">Cada molino y bomba con su estado (funcionando / parado) y el nivel de su tanque.</span></li>
+    <li><span class="t">Últimos valores</span><span class="d">Nivel de tanque, golpes, corriente, batería y señal — la última lectura de cada sensor.</span></li>
+    <li><span class="t">Gráfico en el tiempo</span><span class="d">Evolución del nivel del tanque y los golpes del molino, para ver la tendencia.</span></li>
+    <li><span class="t">Alertas abiertas</span><span class="d">Qué está avisando ahora y por qué; el silencio cuando todo está en orden.</span></li>
+    <li><span class="t">Rendimiento del molino</span><span class="d">Fundación para la fase 2: tendencia del rendimiento para anticipar el desgaste del cuero.</span></li>
+    <li><span class="t">Registro de WhatsApp</span><span class="d">Estado de entrega de cada aviso (enviado, entregado, sin consentimiento).</span></li>
+  </ul>
+</div></section>
+
+<!-- ADMIN -->
+<section class="bg-alt"><div class="wrap">
+  <div class="cols2">
+    <div class="col"><div class="eyebrow">Solo lectura</div><h3>Una herramienta para verificar</h3><p>Sirve para depurar y confirmar que el sistema mide bien durante el piloto. No reemplaza al aviso: el valor sigue siendo el WhatsApp.</p></div>
+    <div class="col"><div class="eyebrow">Datos de producto</div><h3>Editables por Famacon</h3><p>Diámetros, carreras, tabla de bombeo, geometría de tanques y η se cargan en una pantalla de administración — en la base, nunca en el código.</p></div>
+  </div>
+</div></section>
+
+<!-- CTA -->
+<section class="band"><div class="wrap">
+  <div class="eyebrow">Acceso interno</div>
+  <h2>El agua de tu campo, bajo control</h2>
+  <p>El tablero es para Famacon. El productor solo recibe el aviso.</p>
+  <a href="/login" class="btn">Ingresar</a>
+</div></section>
+
+<div id="site-footer"></div>
+<script src="/nav.js"></script>
+</body>
+</html>
