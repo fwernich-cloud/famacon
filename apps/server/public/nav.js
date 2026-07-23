@@ -58,7 +58,8 @@
   }
   var MIC = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 15a3 3 0 0 0 3-3V6a3 3 0 0 0-6 0v6a3 3 0 0 0 3 3z"/><path d="M18 11a6 6 0 0 1-12 0H4a8 8 0 0 0 7 7.9V22h2v-3.1A8 8 0 0 0 20 11z"/></svg>';
   // Smoothly auto-scroll a chat (ping-pong, pauses at ends, stops on hover).
-  function autoScroll(el, sb) {
+  function autoScroll(el, sb, speed) {
+    speed = speed || 0.5;
     var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
     var dir = 1, hold = 70, hover = false, pos = 0;   // pos: float accumulator (scrollTop rounds)
     el.addEventListener('mouseenter', function () { hover = true; });
@@ -77,7 +78,7 @@
         else {
           var max = el.scrollHeight - el.clientHeight;
           if (max > 2) {
-            pos += dir * 0.5;
+            pos += dir * speed;
             if (pos >= max) { pos = max; dir = -1; hold = 120; }
             else if (pos <= 0) { pos = 0; dir = 1; hold = 120; }
             el.scrollTop = pos;
@@ -195,6 +196,14 @@
         ph.insertAdjacentHTML('afterend',
           '<p class="phone-note">No es una app — llega por WhatsApp, sin instalar nada.</p>');
       }
+    });
+
+    // Scrollable browser-window screenshots: gentle auto-scroll + scroll indicator.
+    document.querySelectorAll('.shot.scroll').forEach(function (sh) {
+      if (sh.dataset.sc) return; sh.dataset.sc = '1';
+      var win = sh.querySelector('.win'); if (!win) return;
+      var sb = document.createElement('div'); sb.className = 'win-sb'; sh.appendChild(sb);
+      autoScroll(win, sb, 0.9);
     });
 
     var track = document.getElementById('track');
