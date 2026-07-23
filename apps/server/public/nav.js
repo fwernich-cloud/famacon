@@ -28,6 +28,22 @@
     { label: 'Contacto', href: '/contacto' },
   ];
 
+  // Line icons for feature cards (stroke = currentColor). Injected by data-icon.
+  var ICONS = {
+    bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10 21a2 2 0 0 0 4 0"/>',
+    whatsapp: '<path d="M20.5 11.5a8.5 8.5 0 0 1-12.4 7.5L3 20.5l1.6-4.9A8.5 8.5 0 1 1 20.5 11.5z"/><path d="M8.6 8.4c-.3 0-.6.1-.8.4-.3.3-.9.9-.9 2.1s.9 2.5 1 2.6c.1.2 1.7 2.9 4.3 3.9 2.1.8 2.6.7 3 .6.6-.1 1.4-.6 1.6-1.2.2-.6.2-1 .1-1.2-.1-.1-.3-.2-.6-.4-.3-.2-1.4-.7-1.6-.8-.2-.1-.4-.1-.6.1-.2.3-.6.8-.7 1-.1.1-.3.1-.5 0-.3-.1-1.1-.4-2-1.3-.8-.7-1.3-1.5-1.4-1.8-.1-.2 0-.4.1-.5l.4-.4c.1-.2.2-.3.2-.5s0-.3-.1-.5c0-.1-.5-1.3-.7-1.8-.1-.4-.3-.4-.5-.4z" fill="currentColor" stroke="none"/>',
+    history: '<path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/><path d="M12 7v5l3 2"/>',
+    shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/>',
+    template: '<path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z"/><path d="M14 3v5h5"/><path d="M9 15l2 2 4-4"/>',
+    consent: '<path d="M22 11.5V12a10 10 0 1 1-5.9-9.1"/><path d="M22 4 12 14.01l-3-3"/>',
+    lock: '<rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
+    gauge: '<path d="M4 15a8 8 0 1 1 16 0"/><path d="M12 15l4-4"/><circle cx="12" cy="15" r="1.1" fill="currentColor" stroke="none"/>',
+    trend: '<path d="M3 17l6-6 4 4 8-8"/><path d="M17 7h4v4"/>',
+    pattern: '<path d="M3 12h4l2-7 4 14 2-7h6"/>',
+    drop: '<path d="M12 2.7S6 9 6 13.5a6 6 0 0 0 12 0C18 9 12 2.7 12 2.7z"/>',
+    signal: '<path d="M4 20V10"/><path d="M9 20V6"/><path d="M14 20v-9"/><path d="M19 20V4"/>',
+  };
+
   var path = location.pathname.replace(/\/index\.html?$/, '/').replace(/\.html$/, '') || '/';
   var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
 
@@ -87,6 +103,17 @@
         if (!wasOpen) li.classList.add('open');
       });
     });
+    // Inject line icons into any element carrying data-icon.
+    document.querySelectorAll('[data-icon]').forEach(function (el) {
+      if (el.dataset.iconDone) return;
+      var g = ICONS[el.getAttribute('data-icon')];
+      if (!g) return;
+      el.dataset.iconDone = '1';
+      var d = document.createElement('div'); d.className = 'ficon';
+      d.innerHTML = '<svg viewBox="0 0 24 24" aria-hidden="true">' + g + '</svg>';
+      el.insertBefore(d, el.firstChild);
+    });
+
     var track = document.getElementById('track');
     if (track && !track.dataset.dup) { track.dataset.dup = '1'; track.innerHTML += track.innerHTML; }
 

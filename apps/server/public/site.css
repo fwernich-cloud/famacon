@@ -343,3 +343,8 @@
 .diagram-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:20px 22px;
   box-shadow:0 24px 58px -34px rgba(15,34,49,.45)}
 .diagram{display:block;width:100%;height:auto}
+
+/* ── Feature-card line icons ──────────────────────────────────────────── */
+.ficon{width:44px;height:44px;border-radius:12px;background:#e8f5fd;color:var(--accent);
+  display:grid;place-items:center;margin-bottom:16px}
+.ficon svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
