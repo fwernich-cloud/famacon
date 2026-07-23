@@ -1,5 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { dirname, join } from 'node:path';
+import { readFileSync } from 'node:fs';
 import Fastify from 'fastify';
 import fastifyStatic from '@fastify/static';
 import fastifyCookie from '@fastify/cookie';
@@ -49,6 +50,16 @@ await fastify.register(async (ui) => {
   });
   // extensions:['html'] gives clean URLs (/como-funciona -> como-funciona.html)
   await ui.register(fastifyStatic, { root: join(__dirname, '..', 'public'), extensions: ['html'] });
+  // Branded 404 for unknown pages (JSON for unknown /api paths).
+  ui.setNotFoundHandler((req, reply) => {
+    if ((req.raw.url || '').startsWith('/api/')) return reply.code(404).send({ error: 'not found' });
+    try {
+      return reply.code(404).type('text/html')
+        .send(readFileSync(join(__dirname, '..', 'public', '404.html'), 'utf8'));
+    } catch {
+      return reply.code(404).type('text/html').send('<h1>404 — página no encontrada</h1>');
+    }
+  });
 });
 
 // Wire engine/watchdog opened-alerts → WhatsApp dispatch (consent-gated).
