@@ -38,7 +38,10 @@ await fastify.register(apiRoutes);
 // Static site + app. Landing ("/") and the sign-in page are PUBLIC; the operator
 // pages redirect to /login.html without a valid session. /api enforces its own 401.
 await fastify.register(async (ui) => {
-  const guarded = new Set(['/dashboard', '/dashboard.html', '/admin', '/admin.html']);
+  // /inversores is intentionally out of the public nav — reachable only by direct
+  // link and gated behind sign-in (to a farmer "inversores" = solar inverters).
+  const guarded = new Set(['/dashboard', '/dashboard.html', '/admin', '/admin.html',
+    '/inversores', '/inversores.html']);
   ui.addHook('onRequest', (req, reply, done) => {
     const p = (req.raw.url || '').split('?')[0].replace(/\/+$/, '') || '/';
     if (guarded.has(p)) return requirePage(req, reply, done);
