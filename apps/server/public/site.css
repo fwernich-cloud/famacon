@@ -203,7 +203,10 @@
 
 /* Footer */
 .site-foot{background:#0b1a26;color:rgba(255,255,255,.7)}
-.site-foot .foot-grid{display:grid;grid-template-columns:1.7fr 1fr 1fr 1fr 1fr;gap:34px;padding:64px 28px 30px}
+.site-foot .foot-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:40px;padding:64px 28px 30px}
+.site-foot .fb .by{font-size:13px;color:rgba(255,255,255,.5);margin-top:12px;max-width:42ch}
+.site-foot .fb .by a{color:var(--accent-lite);text-decoration:none}
+.site-foot .fb .by a:hover{text-decoration:underline}
 .site-foot h4{font:600 11px 'Inter';letter-spacing:.2em;text-transform:uppercase;color:#fff;margin-bottom:16px}
 .site-foot a{display:block;color:rgba(255,255,255,.62);font-size:14px;padding:5px 0}
 .site-foot a:hover{color:#fff}

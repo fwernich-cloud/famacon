@@ -7,24 +7,16 @@
       ['Cómo funciona', '/como-funciona'],
       ['El tablero', '/tablero'],
       ['Diagnóstico y alertas', '/alertas'],
-      ['WhatsApp y datos', '/whatsapp'],
+      ['WhatsApp y avisos', '/whatsapp'],
       ['Precios', '/precios'],
       ['Preguntas frecuentes', '/faq'],
     ], feat: { eyebrow: 'Piloto en marcha', title: 'Probá el tablero', cta: ['Solicitar demo', '/contacto'] } },
-    { label: 'Productos', items: [
-      ['Molinos Huracán', '/huracan'],
-      ['Molinos Hércules', '/hercules'],
-      ['Bombas', '/bombas'],
-      ['Repuestos y servicio', '/repuestos'],
-      ['Descargas', '/descargas'],
-    ], feat: { eyebrow: 'Desde 1981', title: '¿Qué molino necesito?', cta: ['Ver molinos', '/huracan'] } },
     { label: 'Empresa', items: [
       ['Nosotros', '/nosotros'],
       ['Obras / Instalaciones', '/obras'],
       ['Novedades', '/novedades'],
       ['Trabajá con nosotros', '/trabajo'],
     ] },
-    { label: 'Inversores', href: '/inversores' },
     { label: 'Contacto', href: '/contacto' },
   ];
 
@@ -127,13 +119,13 @@
   var footer =
     '<footer class="site-foot"><div class="wrap foot-grid">' +
       '<div class="fb"><span class="n">Famacon Control</span>' +
-        '<p>Monitoreo remoto de molinos y bombas para campos ganaderos. Un producto de Famacon S.A., fabricante de molinos Huracán y Hércules desde 1981.</p></div>' +
-      '<div><h4>Control</h4><a href="/como-funciona">Cómo funciona</a><a href="/alertas">Diagnóstico y alertas</a><a href="/whatsapp">WhatsApp y datos</a><a href="/faq">Preguntas frecuentes</a></div>' +
-      '<div><h4>Productos</h4><a href="/huracan">Molinos Huracán</a><a href="/hercules">Molinos Hércules</a><a href="/bombas">Bombas</a><a href="/descargas">Descargas</a></div>' +
-      '<div><h4>Empresa</h4><a href="/nosotros">Nosotros</a><a href="/obras">Obras</a><a href="/inversores">Inversores</a><a href="/contacto">Contacto</a></div>' +
+        '<p>Monitoreo remoto de molinos y bombas para campos ganaderos: cruzamos el nivel del tanque con el estado del equipo y avisamos por WhatsApp.</p>' +
+        '<p class="by">Por <a href="https://famacon.com.ar" target="_blank" rel="noopener">Famacon</a>&nbsp;— fabricante de molinos Huracán y Hércules desde 1981.</p></div>' +
+      '<div><h4>Control</h4><a href="/como-funciona">Cómo funciona</a><a href="/alertas">Diagnóstico y alertas</a><a href="/whatsapp">WhatsApp y avisos</a><a href="/faq">Preguntas frecuentes</a></div>' +
+      '<div><h4>Empresa</h4><a href="/nosotros">Nosotros</a><a href="/obras">Obras</a><a href="/contacto">Contacto</a></div>' +
       '<div><h4>Legal</h4><a href="/privacidad">Privacidad</a><a href="/terminos">Términos</a><a href="/login">Ingresar</a></div>' +
     '</div><div class="foot-bar"><div class="wrap">' +
-      '<span>© 2026 Famacon S.A. — Verónica, Buenos Aires · Argentina</span>' +
+      '<span>© 2026 Famacon S.A. — Buenos Aires — Argentina</span>' +
       '<span>Datos personales protegidos · Ley 25.326</span>' +
     '</div></div></footer>';
 
