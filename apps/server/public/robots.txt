@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /dashboard
+Disallow: /admin
+Disallow: /inversores
+Disallow: /login
+Disallow: /logout
+
+Sitemap: https://famaconcontrol.com/sitemap.xml
