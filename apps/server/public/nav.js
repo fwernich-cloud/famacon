@@ -190,6 +190,11 @@
       scr.insertBefore(sb, scr.firstChild);
       scr.insertBefore(isl, scr.firstChild);
       var hi = document.createElement('div'); hi.className = 'home-ind'; scr.appendChild(hi);
+      // Make explicit: it's not an app, it's WhatsApp.
+      if (!ph.nextElementSibling || !ph.nextElementSibling.classList.contains('phone-note')) {
+        ph.insertAdjacentHTML('afterend',
+          '<p class="phone-note">No es una app — llega por WhatsApp, sin instalar nada.</p>');
+      }
     });
 
     var track = document.getElementById('track');

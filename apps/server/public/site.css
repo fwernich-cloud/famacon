@@ -405,3 +405,5 @@
 .ficon{width:44px;height:44px;border-radius:12px;background:#e8f5fd;color:var(--accent);
   display:grid;place-items:center;margin-bottom:16px}
 .ficon svg{width:23px;height:23px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round}
+/* "not an app" caption under the phone mockup */
+.phone-note{text-align:center;font-size:12.5px;color:var(--muted);margin:16px auto 0;max-width:300px;line-height:1.5}
