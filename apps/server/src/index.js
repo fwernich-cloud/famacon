@@ -36,12 +36,14 @@ await fastify.register(apiRoutes);
 // Static site + app. Landing ("/") and the sign-in page are PUBLIC; the operator
 // pages redirect to /login.html without a valid session. /api enforces its own 401.
 await fastify.register(async (ui) => {
+  const guarded = new Set(['/dashboard', '/dashboard.html', '/admin', '/admin.html']);
   ui.addHook('onRequest', (req, reply, done) => {
-    const p = (req.raw.url || '').split('?')[0];
-    if (p === '/dashboard.html' || p === '/admin.html') return requirePage(req, reply, done);
+    const p = (req.raw.url || '').split('?')[0].replace(/\/+$/, '') || '/';
+    if (guarded.has(p)) return requirePage(req, reply, done);
     done();
   });
-  await ui.register(fastifyStatic, { root: join(__dirname, '..', 'public') });
+  // extensions:['html'] gives clean URLs (/como-funciona -> como-funciona.html)
+  await ui.register(fastifyStatic, { root: join(__dirname, '..', 'public'), extensions: ['html'] });
 });
 
 // Wire engine/watchdog opened-alerts → WhatsApp dispatch (consent-gated).

@@ -13,15 +13,7 @@
 </head>
 <body>
 
-<header class="site-head"><div class="wrap">
-  <a href="#top" class="brand" aria-label="Ir al inicio"><span class="n">Famacon&nbsp;Control</span><span class="t">Monitoreo de campo</span></a>
-  <nav class="site-nav">
-    <a href="#problema">El problema</a>
-    <a href="#sistema">El sistema</a>
-    <a href="#como">Cómo funciona</a>
-    <a href="/dashboard.html" class="btn">Ingresar</a>
-  </nav>
-</div></header>
+<div id="site-header"></div>
 
 <!-- HERO -->
 <section class="hero">
@@ -32,8 +24,8 @@
     <h1>Enterate antes de que<br>tu campo se quede sin agua</h1>
     <p class="sub">No medimos solo el tanque. <b>Cruzamos el nivel del tanque con el estado del equipo</b> que lo llena — y hablamos solo cuando hay algo que hacer.</p>
     <div class="cta">
-      <a href="/dashboard.html" class="btn">Ver el tablero</a>
-      <a href="#sistema" class="arrow-link">Cómo lo hacemos <span class="a">→</span></a>
+      <a href="/contacto" class="btn">Solicitar demo</a>
+      <a href="/como-funciona" class="arrow-link">Cómo funciona <span class="a">→</span></a>
     </div>
     <div class="rule"></div>
     <div class="eyebrow" style="color:rgba(255,255,255,.55)">El silencio es parte del producto</div>
@@ -44,6 +36,16 @@
   <span>De <b>Famacon S.A.</b> — fabricantes de los molinos <b>Huracán</b> y <b>Hércules</b> desde 1981</span>
   <span>Verónica · Buenos Aires · Argentina</span>
 </div></div>
+
+<!-- METRICS -->
+<section style="padding:56px 0"><div class="wrap">
+  <div class="stats">
+    <div class="stat"><div class="num">1981</div><div class="lab">Fabricando molinos y bombas</div></div>
+    <div class="stat"><div class="num">2</div><div class="lab">Líneas: Huracán y Hércules</div></div>
+    <div class="stat"><div class="num">5</div><div class="lab">Destinatarios por aviso</div></div>
+    <div class="stat"><div class="num">100%</div><div class="lab">Datos aislados por productor</div></div>
+  </div>
+</div></section>
 
 <!-- PROBLEM -->
 <section id="problema"><div class="wrap">
@@ -163,36 +165,13 @@
   <div class="eyebrow">Piloto en marcha</div>
   <h2>El agua de tu campo, <em>bajo control</em></h2>
   <p>El tablero interno muestra cada sensor, el diagnóstico cruzado y los avisos, en vivo.</p>
-  <a href="/dashboard.html" class="btn">Ingresar al tablero</a>
+  <a href="/login" class="btn">Ingresar al tablero</a>
 </div></section>
 
 <!-- FOOTER -->
-<footer class="site-foot">
-  <div class="wrap">
-    <div class="fb">
-      <span class="n">Famacon Control</span>
-      <p>Monitoreo remoto de molinos y bombas para campos ganaderos. Un producto de Famacon S.A., fabricante de molinos de viento y bombas solares desde 1981.</p>
-    </div>
-    <div>
-      <h4>Producto</h4>
-      <a href="#problema">El problema</a>
-      <a href="#sistema">El diagnóstico cruzado</a>
-      <a href="#como">Cómo funciona</a>
-      <a href="/dashboard.html">Tablero interno</a>
-    </div>
-    <div>
-      <h4>Empresa</h4>
-      <a href="#">Famacon S.A.</a>
-      <a href="#">Verónica, Buenos Aires</a>
-      <a href="#">Argentina</a>
-    </div>
-  </div>
-  <div class="foot-bar"><div class="wrap">
-    <span>© 2026 Famacon S.A. — Todos los derechos reservados.</span>
-    <span>Datos personales protegidos · Ley 25.326</span>
-  </div></div>
-</footer>
+<div id="site-footer"></div>
 
+<script src="/nav.js"></script>
 <script>
   // Carousel: duplicate the slides once so the marquee loops seamlessly (infinite flow).
   (function () {
