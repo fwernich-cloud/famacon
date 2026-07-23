@@ -438,3 +438,9 @@
 @media(prefers-reduced-motion:reduce){
   .carousel .track,.vtrack{animation:none!important}
 }
+
+/* keep wide SVG diagrams legible on phones: scroll inside the card */
+@media(max-width:640px){
+  .diagram-card{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .diagram-card .diagram{min-width:600px}
+}
