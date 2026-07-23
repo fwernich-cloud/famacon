@@ -91,6 +91,60 @@
     requestAnimationFrame(tick);
   }
 
+  // ── Testimonials (SAMPLE — reemplazar por frases reales de Federico) ──────
+  var TESTI = [
+    { q: 'Antes me enteraba cuando ya estaba la hacienda sin agua. Ahora me llega el WhatsApp y voy tranquilo, sabiendo qué revisar.', n: 'Jorge M.', r: 'Cría · La Pampa', a: 'https://randomuser.me/api/portraits/men/32.jpg' },
+    { q: 'Tengo el molino a 8 km del casco. Me avisó que estaba parado un domingo a la tarde; me ahorré dos días sin agua.', n: 'Andrés R.', r: 'Invernada · Córdoba', a: 'https://randomuser.me/api/portraits/men/67.jpg' },
+    { q: 'Lo bueno es que no te llena de mensajes. Avisa cuando de verdad hay que ir. Le tengo confianza.', n: 'Marta L.', r: 'Cría · Buenos Aires', a: 'https://randomuser.me/api/portraits/women/44.jpg' },
+    { q: 'El puestero dejó de andar recorriendo a ciegas. Vamos directo a lo que falla y listo.', n: 'Carlos F.', r: 'Campo mixto · Santa Fe', a: 'https://randomuser.me/api/portraits/men/85.jpg' },
+    { q: 'Lo instalaron ellos y quedó andando. Yo no toqué nada, y recibo el aviso en el teléfono de siempre.', n: 'Rubén S.', r: 'Tambo · Santa Fe', a: 'https://randomuser.me/api/portraits/men/51.jpg' },
+    { q: 'Con el calor de enero es cuando más sirve. El agua no puede faltar y ahora lo tengo controlado.', n: 'Laura G.', r: 'Invernada · Entre Ríos', a: 'https://randomuser.me/api/portraits/women/68.jpg' },
+    { q: 'Simple y al grano. Un mensaje claro con qué campo y qué equipo. Justo lo que necesitaba.', n: 'Diego P.', r: 'Cría · Corrientes', a: 'https://randomuser.me/api/portraits/men/76.jpg' },
+  ];
+  function initTestimonials() {
+    var stage = document.querySelector('[data-testi]');
+    if (!stage || stage.dataset.built) return; stage.dataset.built = '1';
+    var track = document.createElement('div'); track.className = 'tstage-track';
+    TESTI.forEach(function (t) {
+      var s = document.createElement('div'); s.className = 'tslide';
+      s.innerHTML = '<figure class="card"><div class="stars" aria-hidden="true">★★★★★</div>' +
+        '<blockquote>“' + t.q + '”</blockquote>' +
+        '<figcaption class="by"><img class="av" src="' + t.a + '" alt="" loading="lazy">' +
+        '<span class="rule"></span><span class="nm">' + t.n + '</span><span class="role">' + t.r + '</span></figcaption></figure>';
+      track.appendChild(s);
+    });
+    stage.appendChild(track);
+    var controls = document.createElement('div'); controls.className = 'tcontrols';
+    var prev = document.createElement('button'); prev.className = 'tnav prev'; prev.setAttribute('aria-label', 'Anterior'); prev.innerHTML = '‹';
+    var dots = document.createElement('div'); dots.className = 'tdots';
+    var next = document.createElement('button'); next.className = 'tnav next'; next.setAttribute('aria-label', 'Siguiente'); next.innerHTML = '›';
+    controls.appendChild(prev); controls.appendChild(dots); controls.appendChild(next);
+    stage.parentNode.appendChild(controls);
+    var slides = [].slice.call(track.children);
+    var idx = 0, timer = null;
+    var reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var dotEls = slides.map(function (_, i) {
+      var d = document.createElement('button'); d.setAttribute('aria-label', 'Testimonio ' + (i + 1));
+      d.addEventListener('click', function () { go(i, true); }); dots.appendChild(d); return d;
+    });
+    function center() {
+      var s = slides[idx];
+      track.style.transform = 'translateX(' + (stage.clientWidth / 2 - (s.offsetLeft + s.offsetWidth / 2)) + 'px)';
+      slides.forEach(function (el, j) { el.classList.toggle('is-active', j === idx); });
+      dotEls.forEach(function (d, j) { d.classList.toggle('on', j === idx); d.setAttribute('aria-current', j === idx ? 'true' : 'false'); });
+    }
+    function go(i, manual) { idx = (i + slides.length) % slides.length; center(); if (manual) play(); }
+    function play() { stop(); if (reduce) return; timer = setInterval(function () { go(idx + 1); }, 5200); }
+    function stop() { if (timer) { clearInterval(timer); timer = null; } }
+    prev.addEventListener('click', function () { go(idx - 1, true); });
+    next.addEventListener('click', function () { go(idx + 1, true); });
+    stage.addEventListener('mouseenter', stop);
+    stage.addEventListener('mouseleave', play);
+    var rt; window.addEventListener('resize', function () { clearTimeout(rt); rt = setTimeout(center, 120); });
+    track.querySelectorAll('img').forEach(function (im) { im.addEventListener('load', center); });
+    center(); play();
+  }
+
   var path = location.pathname.replace(/\/index\.html?$/, '/').replace(/\.html$/, '') || '/';
   var esc = function (s) { return s.replace(/&/g, '&amp;').replace(/</g, '&lt;'); };
 
@@ -241,7 +295,9 @@
     var track = document.getElementById('track');
     if (track && !track.dataset.dup) { track.dataset.dup = '1'; track.innerHTML += track.innerHTML; }
 
-    document.querySelectorAll('.vtrack, .ttrack').forEach(function (t) { if (!t.dataset.dup) { t.dataset.dup = '1'; t.innerHTML += t.innerHTML; } });
+    document.querySelectorAll('.vtrack').forEach(function (t) { if (!t.dataset.dup) { t.dataset.dup = '1'; t.innerHTML += t.innerHTML; } });
+
+    initTestimonials();
 
     // FAQ accordion: single-open, smooth expand.
     document.querySelectorAll('.faq .acc-q').forEach(function (q) {
