@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>El tablero — Famacon Control</title>
-<meta name="description" content="El tablero interno de Famacon Control: sensores, últimos valores, batería, el gráfico de tanque vs golpes, alertas y el registro de envíos.">
+<meta name="description" content="El tablero interno de Famacon Control: equipos y estado, el gráfico de tanque vs golpes, alertas abiertas y el registro de envíos de WhatsApp.">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,600&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/app.css"><link rel="stylesheet" href="/site.css">
@@ -19,24 +19,57 @@
   <div style="margin-top:22px"><a href="/login" class="btn">Ingresar al tablero</a></div>
 </div></section>
 
-<!-- WHAT IT SHOWS -->
+<!-- CENTERPIECE: real screenshot -->
 <section><div class="wrap">
-  <div class="lead"><div class="eyebrow">Qué muestra</div><h2>El campo, de un vistazo</h2></div>
-  <ul class="info-list">
-    <li><span class="t">Equipos y estado</span><span class="d">Cada molino y bomba con su estado (funcionando / parado) y el nivel de su tanque.</span></li>
-    <li><span class="t">Últimos valores</span><span class="d">Nivel de tanque, golpes, corriente, batería y señal — la última lectura de cada sensor.</span></li>
-    <li><span class="t">Gráfico en el tiempo</span><span class="d">Evolución del nivel del tanque y los golpes del molino, para ver la tendencia.</span></li>
-    <li><span class="t">Alertas abiertas</span><span class="d">Qué está avisando ahora y por qué; el silencio cuando todo está en orden.</span></li>
-    <li><span class="t">Rendimiento del molino</span><span class="d">Fundación para la fase 2: tendencia del rendimiento para anticipar el desgaste del cuero.</span></li>
-    <li><span class="t">Registro de WhatsApp</span><span class="d">Estado de entrega de cada aviso (enviado, entregado, sin consentimiento).</span></li>
-  </ul>
+  <div class="shot-wrap">
+    <div class="shot">
+      <div class="bar"><b></b><b></b><b></b><span class="u">famaconcontrol.com/tablero</span></div>
+      <img src="/img/dashboard/tablero-top.png" alt="Tablero de Famacon Control: equipos, estado y el gráfico de nivel de tanque vs golpes del molino" loading="lazy">
+    </div>
+    <div class="shot-cap">Tablero real del piloto — cuatro molinos y la bomba eléctrica, cada uno con su tanque, estado y última lectura.</div>
+  </div>
+</div></section>
+
+<!-- WHAT IT SHOWS, section by section -->
+<section class="bg-alt"><div class="wrap">
+  <div class="lead"><div class="eyebrow">Qué muestra</div><h2>El campo, sección por sección</h2></div>
+
+  <div class="showcase">
+    <div class="sc-img"><div class="shot"><div class="bar"><b></b><b></b><b></b><span class="u">Equipos y estado</span></div>
+      <img src="/img/dashboard/equipment.png" alt="Tarjetas de equipos con estado funcionando o parado y nivel de tanque" loading="lazy"></div></div>
+    <div class="sc-txt"><div class="eyebrow">Equipos</div><h3>Todo el campo, de un vistazo</h3>
+      <p>Cada molino y bomba con su estado —funcionando o parado—, el nivel de su tanque, los golpes o la corriente y cuándo fue la última lectura. La bomba que comparte tanque con un molino aparece junto a él.</p></div>
+  </div>
+
+  <div class="showcase flip">
+    <div class="sc-img"><div class="shot"><div class="bar"><b></b><b></b><b></b><span class="u">Tanque vs golpes · 48 h</span></div>
+      <img src="/img/dashboard/chart.png" alt="Gráfico del nivel del tanque contra los golpes del molino en las últimas 48 horas" loading="lazy"></div></div>
+    <div class="sc-txt"><div class="eyebrow">Tendencia</div><h3>El tanque contra el molino</h3>
+      <p>La línea es el nivel del tanque; las barras, los golpes del molino. Ver ambos juntos revela la historia: si el molino golpea pero el tanque no sube, algo pasa entre la bomba y el agua.</p></div>
+  </div>
+
+  <div class="showcase">
+    <div class="sc-img"><div class="shot"><div class="bar"><b></b><b></b><b></b><span class="u">Alertas abiertas</span></div>
+      <img src="/img/dashboard/alerts.png" alt="Panel de alertas abiertas con el diagnóstico del incidente" loading="lazy"></div></div>
+    <div class="sc-txt"><div class="eyebrow">Alertas</div><h3>Qué avisa y por qué</h3>
+      <p>Cada alerta abierta con su diagnóstico en palabras claras: qué equipo, qué tanque y qué conviene revisar. Cuando todo está en orden, el panel queda en silencio — y ese silencio también es información.</p></div>
+  </div>
+
+  <div class="showcase flip">
+    <div class="sc-img"><div class="shot"><div class="bar"><b></b><b></b><b></b><span class="u">Registro de WhatsApp</span></div>
+      <img src="/img/dashboard/messages.png" alt="Registro de envíos de WhatsApp con estado de entrega por destinatario" loading="lazy"></div></div>
+    <div class="sc-txt"><div class="eyebrow">Entregas</div><h3>Cada aviso, registrado</h3>
+      <p>El estado de entrega de cada WhatsApp: enviado, entregado o retenido por falta de consentimiento. Trazabilidad completa de qué se avisó, a quién y cuándo.</p></div>
+  </div>
 </div></section>
 
 <!-- ADMIN -->
-<section class="bg-alt"><div class="wrap">
-  <div class="cols2">
-    <div class="col"><div class="eyebrow">Solo lectura</div><h3>Una herramienta para verificar</h3><p>Sirve para depurar y confirmar que el sistema mide bien durante el piloto. No reemplaza al aviso: el valor sigue siendo el WhatsApp.</p></div>
-    <div class="col"><div class="eyebrow">Datos de producto</div><h3>Editables por Famacon</h3><p>Diámetros, carreras, tabla de bombeo, geometría de tanques y η se cargan en una pantalla de administración — en la base, nunca en el código.</p></div>
+<section><div class="wrap">
+  <div class="lead"><div class="eyebrow">Administración</div><h2>Los números de Famacon, en la base</h2>
+    <p>Diámetros de cilindro, carreras, geometría de tanques y η se cargan en una pantalla de administración — en la base de datos, nunca en el código. El motor los toma al instante.</p></div>
+  <div class="shot-wrap" style="margin-top:30px">
+    <div class="shot"><div class="bar"><b></b><b></b><b></b><span class="u">famaconcontrol.com/admin</span></div>
+      <img src="/img/dashboard/admin.png" alt="Pantalla de administración de datos de producto: cilindros, molinos y geometría de tanques" loading="lazy"></div>
   </div>
 </div></section>
 
