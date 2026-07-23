@@ -264,3 +264,8 @@
 .prose p{color:var(--muted);font-size:15px;margin-bottom:12px}
 .prose ul{color:var(--muted);font-size:15px;margin:0 0 12px 20px}
 .prose li{margin-bottom:6px}
+
+/* Interior page hero with a background photo */
+.page-hero.photo{background-size:cover;background-position:center}
+.page-hero.photo::before{background:linear-gradient(90deg, rgba(9,18,27,.92) 0%, rgba(9,18,27,.78) 42%, rgba(9,18,27,.5) 100%)}
+.page-hero.photo .wrap{text-shadow:0 1px 16px rgba(0,0,0,.5)}
