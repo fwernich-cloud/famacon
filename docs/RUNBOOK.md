@@ -51,6 +51,29 @@ Per-sensor `expected_period_s` sets the heartbeat window. Pilot demo values are 
 ## WhatsApp go-live
 Fill `WA_*` in `.env` and restart the server — it flips from dry-run to live automatically.
 Full steps + HSM templates to approve: `docs/WHATSAPP.md`.
+Templates to approve in Meta: `famacon_alerta_urgente`, `famacon_alerta_aviso` (alerts) and
+`famacon_nuevo_lead` (new-lead notification).
+
+## Ingest (gateway / testing)
+`POST /ingest` — body `{ "gw":"GW-01", "uuid":"<unique>", "ts":"<ISO>", "readings":[ {"sensor":"TQ-01-nivel","tipo":"tanque_nivel","v":42,"batt":3.6,"rssi":-70}, ... ] }`.
+`tipo ∈ tanque_nivel | molino_golpes | corriente_bomba | bateria | temperatura`. Idempotent by
+`uuid` (retries return `duplicate`, stored 0). New data auto-enqueues an engine evaluation.
+
+## Leads (contact form)
+- Every message is stored in `contact_message` (name, email, phone, audience, message, ip).
+  View: `SELECT created_at,name,phone,audience,message FROM contact_message ORDER BY created_at DESC;`
+- On each new lead a **WhatsApp** is sent to Famacon (`LEAD_NOTIFY_TO` in `.env`, defaults to the
+  commercial number) — fire-and-forget, dry-run until the WA token + `famacon_nuevo_lead` template
+  are live. Leads are never lost (DB is the backup record).
+
+## Public website (marketing) — editing content
+Served statically from `apps/server/public/` (bind-mounted read-only). **HTML/CSS/JS edits are
+live without a rebuild**; only `src/` changes need `docker compose build server`.
+- Header, footer, menu, the floating WhatsApp button, the phone chat and the **testimonials** are
+  all injected from **one file**: `public/nav.js`.
+- **Testimonials** (currently samples): edit the `TESTI` array in `nav.js` — quote, name, role, avatar.
+- **WhatsApp number**: `WA_NUMBER` in `nav.js` (and the link on `contacto.html`).
+- **SEO**: `public/sitemap.xml`, `public/robots.txt`. Blog notes are `public/novedades-*.html`.
 
 ## Secrets
 All in `.env` (git-ignored). Rotate DB/MQTT/dashboard passwords and the WhatsApp token on
