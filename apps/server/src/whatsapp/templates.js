@@ -5,23 +5,17 @@
 // ordered body variables. We keep a plain-text rendering too, for the log and for
 // the (rare) in-session case.
 
+// The NAME is resolved from config (app_setting) at dispatch time, so a text change ships
+// as a new template + a one-row switch, never a deploy. Here we only map severity →
+// language + the ordered body params of the approved 5-variable layout:
+//   "Alerta en {{1}}. Estado del tanque: {{2}}. Nivel medido: {{3}}. Detectado el {{4}}.
+//    Acción recomendada: {{5}}. Aviso automático de Famacon Control, no responda a este mensaje."
+// {{2}} (estado) and {{5}} (acción) come from fixed finite sets, never free-composed text.
+const params5 = (a) => [a.equipo, a.estado, a.nivel, a.detectado, a.accion];
 export const TEMPLATES = {
-  urgent: {
-    name: 'famacon_alerta_urgente',
-    language: 'es',
-    // Body: "🚨 FAMACON CONTROL — {{1}}\n{{2}}\nQué revisar: {{3}}"
-    params: (a) => [a.field, a.diagnosis, a.action || 'Revisar el equipo en el campo.'],
-  },
-  warning: {
-    name: 'famacon_alerta_aviso',
-    language: 'es',
-    params: (a) => [a.field, a.diagnosis, a.action || 'Revisar cuando puedas.'],
-  },
-  info: {
-    name: 'famacon_alerta_aviso',
-    language: 'es',
-    params: (a) => [a.field, a.diagnosis, a.action || 'Aviso preventivo.'],
-  },
+  urgent:  { language: 'es', params: params5 },
+  warning: { language: 'es', params: params5 },
+  info:    { language: 'es', params: params5 },
 };
 
 export function templateForSeverity(severity) {
@@ -45,6 +39,6 @@ export function renderLeadText(l) {
 
 /** Human-readable rendering (stored in the log; used by dry-run). */
 export function renderText(a) {
-  const head = a.severity === 'urgent' ? '🚨 FAMACON CONTROL' : 'FAMACON CONTROL';
-  return `${head} — ${a.field}\n${a.diagnosis}\nQué revisar: ${a.action || 'Revisar el equipo.'}`;
+  return `Alerta en ${a.equipo}. Estado: ${a.estado}. Nivel: ${a.nivel}. ` +
+    `Detectado ${a.detectado}. Acción: ${a.accion}.`;
 }

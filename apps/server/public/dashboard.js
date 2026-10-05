@@ -4,16 +4,40 @@ const ago = (ts) => { if (!ts) return 'sin datos'; const m = (Date.now() - new D
   return m < 60 ? `hace ${Math.round(m)} min` : `hace ${(m / 60).toFixed(1)} h`; };
 const stBadge = (s) => ({ running: '<span class="badge b-ok">Funcionando</span>',
   stopped: '<span class="badge b-danger">Parado</span>',
+  stale: '<span class="badge b-warn">Sin señal</span>',
   unknown: '<span class="badge b-muted">Sin dato</span>' }[s] || `<span class="badge b-muted">${s}</span>`);
+const KIND_ES = { tank_level: 'Nivel tanque', windmill_strokes: 'Golpes molino',
+  pump_current: 'Corriente bomba', battery: 'Batería', temperature: 'Temperatura' };
+const sVal = (k, v) => v == null ? '—'
+  : ({ tank_level: `${v}%`, pump_current: `${v} A`, temperature: `${v} °C`, battery: `${v}%` }[k] ?? `${v}`);
+const roleBadge = (role) => role === 'comparison' ? '<span class="badge b-warn">comparación</span>'
+  : role === 'primary' ? '<span class="badge b-ok">primario</span>' : '';
 
-let FIELD = null;
+let FIELD = new URLSearchParams(location.search).get('field'); // ?field=<id> to pin a field
 
 async function get(u) { const r = await fetch(u); if (!r.ok) throw new Error(u + ' ' + r.status); return r.json(); }
+
+// Field selector (#5): switch fields without editing the URL. The demo field is already
+// excluded server-side (list_fields hides hidden tenants), so it never appears here.
+async function populateFieldSel() {
+  const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;' }[c]));
+  const { fields } = await get('/api/fields');
+  const sel = $('#fieldSel');
+  sel.innerHTML = fields.map((x) => `<option value="${x.field_id}">${esc(x.field_name)}</option>`).join('');
+  sel.value = FIELD;
+  sel.style.display = fields.length > 1 ? '' : 'none';   // only show when there's a choice
+  sel.onchange = () => {
+    FIELD = sel.value;
+    const u = new URL(location); u.searchParams.set('field', FIELD); history.replaceState(null, '', u);
+    load().catch((e) => console.error(e));
+  };
+}
 
 async function load() {
   const ov = await get('/api/overview' + (FIELD ? `?field=${FIELD}` : ''));
   FIELD = ov.field.id;
   $('#fieldName').textContent = ov.field.name;
+  await populateFieldSel();
   const gw = ov.gateway;
   $('#gwStatus').innerHTML = gw ? `Gateway ${gw.ext_ref} · ${ago(gw.last_seen_at)} · RSSI ${fmt(Math.round(gw.signal_baseline_rssi))} dBm` : '';
 
@@ -24,10 +48,22 @@ async function load() {
     return `<div class="card">
       <div class="kind">${e.kind === 'pump' ? 'Bomba eléctrica' : 'Molino'} · ${e.tank_ref || ''}</div>
       <h3>${e.name} ${stBadge(e.state)}</h3>
-      <div class="row"><span class="k">Nivel tanque</span><span class="mono big" style="font-size:24px">${fmt(e.tank_level, '%')}</span></div>
+      <div class="row"><span class="k">Nivel tanque</span><span class="mono big" style="font-size:24px">${e.tank_label || fmt(e.tank_level, '%')}</span></div>
       ${detail}
       <div class="row"><span class="k">Última lectura</span><span class="mono">${ago(e.tank_ts)}</span></div>
     </div>`; }).join('');
+
+  // sensor detail (last value · battery · signal · role). Two level sensors on
+  // one tank render as two rows (primario vs comparación) → the UDL-vs-SWL head-to-head.
+  const S = ov.sensors.slice().sort((a, b) =>
+    (a.tank_ref || 'zz').localeCompare(b.tank_ref || 'zz') || a.kind.localeCompare(b.kind));
+  $('#sensors').innerHTML = `<table><thead><tr><th>Sensor</th><th>Tipo</th><th>Tanque</th><th>Valor</th>
+      <th>Batería</th><th>Señal</th><th>Rol</th><th>Última</th></tr></thead>
+    <tbody>${S.map((s) => `<tr><td class="mono">${s.ext_ref}</td><td>${KIND_ES[s.kind] || s.kind}</td>
+      <td class="mono">${s.tank_ref || '—'}</td><td class="mono">${s.label || sVal(s.kind, s.value)}</td>
+      <td class="mono">${s.battery == null ? '—' : s.battery + '%'}</td>
+      <td class="mono">${s.rssi == null ? '—' : Math.round(s.rssi) + ' dBm'}</td>
+      <td>${roleBadge(s.role)}</td><td class="mono">${ago(s.ts)}</td></tr>`).join('')}</tbody></table>`;
 
   // tank selector
   const tanks = [...new Set(ov.equipment.map((e) => e.tank_ref).filter(Boolean))];
@@ -87,5 +123,6 @@ async function drawChart(field, tank) {
   </svg>`;
 }
 
+window.__refresh = () => load();   // in-place data refresh (no full reload)
 load().catch((e) => { document.querySelector('main').innerHTML = `<section><p class="pending">Error: ${e.message}</p></section>`; });
 setInterval(() => load().catch(() => {}), 30000);

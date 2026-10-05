@@ -25,15 +25,18 @@ export function isDryRun() {
  * Send an alert as an HSM template to one recipient.
  * @returns {Promise<{ok:boolean, id?:string, dryRun:boolean, error?:string, template:string, text:string}>}
  */
-export async function sendAlertTemplate(toE164, alert, { fetchImpl = fetch, log } = {}) {
+export async function sendAlertTemplate(toE164, alert, { fetchImpl = fetch, log, templateName } = {}) {
   const tpl = templateForSeverity(alert.severity);
+  // The template NAME is config-driven (passed in from app_setting); the layout (language +
+  // ordered params) is fixed per the approved HSM. Fall back to the urgent name if unset.
+  const name = templateName || 'famacon_estado_urgente';
   const params = tpl.params(alert);
   const text = renderText(alert);
   const to = toE164.replace(/[^\d]/g, ''); // Cloud API wants digits only
 
   if (isDryRun()) {
-    log?.info({ to, template: tpl.name, params }, 'whatsapp DRY-RUN send');
-    return { ok: true, id: `dryrun-${Date.now()}-${Math.round(params.length)}`, dryRun: true, template: tpl.name, text };
+    log?.info({ to, template: name, params }, 'whatsapp DRY-RUN send');
+    return { ok: true, id: `dryrun-${Date.now()}-${Math.round(params.length)}`, dryRun: true, template: name, text };
   }
 
   const { token, phoneId } = cfg();
@@ -42,7 +45,7 @@ export async function sendAlertTemplate(toE164, alert, { fetchImpl = fetch, log 
     to,
     type: 'template',
     template: {
-      name: tpl.name,
+      name,
       language: { code: tpl.language },
       components: [{ type: 'body', parameters: params.map((t) => ({ type: 'text', text: String(t) })) }],
     },
@@ -58,11 +61,11 @@ export async function sendAlertTemplate(toE164, alert, { fetchImpl = fetch, log 
     if (!res.ok) {
       const error = data?.error?.message || `HTTP ${res.status}`;
       log?.error({ to, error }, 'whatsapp send failed');
-      return { ok: false, dryRun: false, error, template: tpl.name, text };
+      return { ok: false, dryRun: false, error, template: name, text };
     }
-    return { ok: true, id: data?.messages?.[0]?.id, dryRun: false, template: tpl.name, text };
+    return { ok: true, id: data?.messages?.[0]?.id, dryRun: false, template: name, text };
   } catch (err) {
-    return { ok: false, dryRun: false, error: err.message, template: tpl.name, text };
+    return { ok: false, dryRun: false, error: err.message, template: name, text };
   }
 }
 

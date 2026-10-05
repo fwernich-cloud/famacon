@@ -21,7 +21,13 @@
 
 <main class="wrap">
   <section>
-    <div class="sec-head"><h2 id="fieldName">Campo</h2><div id="gwStatus" class="mono muted"></div></div>
+    <div class="sec-head">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap">
+        <h2 id="fieldName">Campo</h2>
+        <select id="fieldSel" style="width:auto;display:none"></select>
+      </div>
+      <div id="gwStatus" class="mono muted"></div>
+    </div>
     <div id="equipment" class="grid cols-3"></div>
   </section>
 
@@ -29,6 +35,11 @@
     <div class="sec-head"><h2>Nivel de tanque vs golpes del molino</h2>
       <select id="tankSel" style="width:auto"></select></div>
     <div class="card"><div id="chart"></div></div>
+  </section>
+
+  <section>
+    <div class="sec-head"><h2>Sensores del campo</h2><span class="eyebrow">Último valor · batería · señal</span></div>
+    <div id="sensors"></div>
   </section>
 
   <section>

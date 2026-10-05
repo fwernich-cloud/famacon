@@ -6,8 +6,9 @@ export async function latestReadings(client, fieldId) {
   const { rows } = await client.query(
     `SELECT DISTINCT ON (s.id)
         s.id AS sensor_id, s.ext_ref, s.kind, s.tank_ref, s.equipment_id,
-        s.expected_period_s, e.kind AS equipment_kind, e.name AS equipment_name,
-        e.fills_tank, r.ts, r.value, r.battery, r.rssi
+        s.expected_period_s, s.for_engine, s.commissioned_at,
+        e.kind AS equipment_kind, e.name AS equipment_name,
+        e.fills_tank, r.ts, r.value, r.battery, r.rssi, r.meta->>'geometry' AS geometry
      FROM sensor s
      LEFT JOIN equipment e ON e.id = s.equipment_id
      LEFT JOIN reading r ON r.sensor_id = s.id
@@ -72,7 +73,8 @@ export async function windmillConfigFull(client, equipmentId) {
 
 export async function tankGeometryByRef(client, tankRef) {
   const { rows } = await client.query(
-    `SELECT shape, diameter_mm, width_mm, length_mm, height_mm FROM tank_geometry WHERE tank_ref = $1`,
+    `SELECT shape, diameter_mm, width_mm, length_mm, height_mm, sensor_offset_mm
+       FROM tank_geometry WHERE tank_ref = $1`,
     [tankRef]);
   return rows[0] || null;
 }
@@ -87,12 +89,14 @@ export async function strokesSum(client, tankRefEquipmentId, sinceIso) {
   return Number(rows[0]?.strokes || 0);
 }
 
-/** First and last tank level (%) in a window, by tank_ref. */
+/** First and last tank level (%) in a window, by tank_ref. Only the engine's
+ *  PRIMARY level sensor (for_engine) — a comparison sensor on the same tank must
+ *  not contaminate the clean-window rise. */
 export async function tankRiseByRef(client, tankRef, sinceIso) {
   const { rows } = await client.query(
     `WITH r AS (
        SELECT rd.ts, rd.value FROM reading rd JOIN sensor s ON s.id = rd.sensor_id
-       WHERE s.tank_ref = $1 AND s.kind='tank_level' AND rd.ts >= $2 ORDER BY rd.ts)
+       WHERE s.tank_ref = $1 AND s.kind='tank_level' AND s.for_engine AND rd.ts >= $2 ORDER BY rd.ts)
      SELECT (SELECT value FROM r ORDER BY ts ASC LIMIT 1) AS first_v,
             (SELECT value FROM r ORDER BY ts DESC LIMIT 1) AS last_v`,
     [tankRef, sinceIso]);
@@ -115,6 +119,38 @@ export async function fieldMeta(client, fieldId) {
   const { rows } = await client.query(
     `SELECT id, name, lat, lon, alert_policy FROM field WHERE id = $1`, [fieldId]
   );
+  return rows[0] || null;
+}
+
+/** Last N non-null readings for a sensor, newest first (for the §4 "bajando" filter). */
+export async function lastNReadings(client, sensorId, n) {
+  const { rows } = await client.query(
+    `SELECT ts, value FROM reading
+      WHERE sensor_id=$1 AND value IS NOT NULL ORDER BY ts DESC LIMIT $2`,
+    [sensorId, n]);
+  return rows;
+}
+
+/** First/last value+ts of a sensor within a window, for the R6 drop-rate (%/h). */
+export async function levelRate(client, sensorId, sinceIso) {
+  const { rows } = await client.query(
+    `SELECT
+       (SELECT value FROM reading WHERE sensor_id=$1 AND ts>=$2 AND value IS NOT NULL ORDER BY ts ASC  LIMIT 1) AS first_v,
+       (SELECT ts    FROM reading WHERE sensor_id=$1 AND ts>=$2 AND value IS NOT NULL ORDER BY ts ASC  LIMIT 1) AS first_ts,
+       (SELECT value FROM reading WHERE sensor_id=$1 AND value IS NOT NULL ORDER BY ts DESC LIMIT 1) AS last_v,
+       (SELECT ts    FROM reading WHERE sensor_id=$1 AND value IS NOT NULL ORDER BY ts DESC LIMIT 1) AS last_ts`,
+    [sensorId, sinceIso]);
+  return rows[0] || null;
+}
+
+/** When an equipment last DELIVERED (value>threshold) and when it was first seen —
+ *  so "sin pulsos hace X h" counts from the last real activity, not from now. */
+export async function equipmentActivity(client, equipmentId, kind, threshold) {
+  const { rows } = await client.query(
+    `SELECT max(r.ts) FILTER (WHERE r.value > $3) AS last_active, min(r.ts) AS first_seen
+       FROM reading r JOIN sensor s ON s.id = r.sensor_id
+      WHERE s.equipment_id=$1 AND s.kind=$2`,
+    [equipmentId, kind, threshold]);
   return rows[0] || null;
 }
 

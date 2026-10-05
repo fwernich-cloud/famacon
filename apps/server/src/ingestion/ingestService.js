@@ -1,6 +1,62 @@
 import { withTenant, resolveGateway } from '../db/withTenant.js';
 import { getDecoder } from '../decoders/registry.js';
 import { enqueueEvaluation } from '../engine/queue.js';
+import { tankGeometryByRef } from '../db/queries.js';
+import { counterDelta, distanceTopToLevelPct, depthBottomToLevelPct } from './transforms.js';
+
+/**
+ * Finalize one decoded reading against live config, keeping the raw device value.
+ * Decoders may emit a RAW measurement (cumulative counter / ultrasonic distance /
+ * submersible depth) tagged with r.transform; this turns it into the engine's value
+ * and returns { value, meta } — meta preserves the raw reading for audit/recalibration.
+ */
+async function finalizeReading(client, sensor, r) {
+  let value = r.value;
+  let meta = r.raw ? { ...r.raw } : null;
+
+  if (r.transform === 'counter_delta') {
+    // Strokes this window = counter now − counter at the previous report (reset-aware).
+    const prev = await client.query(
+      `SELECT (meta->>'counter')::float8 AS counter FROM reading
+        WHERE sensor_id = $1 AND meta ? 'counter' AND ts < $2 ORDER BY ts DESC LIMIT 1`,
+      [sensor.id, r.ts || new Date()]);
+    const prevCounter = prev.rows[0]?.counter ?? null;
+    value = counterDelta(r.value, prevCounter);
+    meta = { ...(meta || {}), counter: r.value, counter_prev: prevCounter };
+  } else if (r.transform === 'distance_top' || r.transform === 'depth_bottom') {
+    // Distance/depth → level %, via the tank's geometry (Item C). A distance→level
+    // (EM500-UDL, distance_top) reading needs BOTH the useful height AND the sensor
+    // offset; a depth→level (SWL, depth_bottom) needs the height. Missing a required
+    // input ⇒ NO % — the tank shows "sin calibrar". Never invent a value from a
+    // missing datum (the transversal rule from the field review).
+    const BLIND_ZONE_MM = 250;   // EM500-UDL C100 blind zone
+    if (r.transform === 'distance_top' && r.value != null && r.value <= BLIND_ZONE_MM) {
+      // Blind zone (Hito 4 #4): a distance at/below the sensor's blind zone is not a real
+      // measurement — it reads the floor of the zone and would otherwise saturate the level.
+      // Flag "revisar montaje"; never a %, never a tanque-vacío alert. Raw mm is kept in meta.
+      value = null;
+      meta = { ...(meta || {}), level_pct: null, geometry: 'revisar_montaje' };
+    } else {
+      const geom = sensor.tank_ref ? await tankGeometryByRef(client, sensor.tank_ref) : null;
+      const needsOffset = r.transform === 'distance_top';
+      const calibrated = !!geom && geom.height_mm != null &&
+        (!needsOffset || geom.sensor_offset_mm != null);
+      if (calibrated) {
+        const pct = r.transform === 'distance_top'
+          ? distanceTopToLevelPct(r.value, geom)
+          : depthBottomToLevelPct(r.value, geom);
+        value = pct == null ? null : Math.round(pct * 10) / 10;   // 1 decimal (Hito 4 #4)
+        meta = { ...(meta || {}), level_pct: value, height_mm: geom.height_mm,
+          sensor_offset_mm: geom.sensor_offset_mm ?? null };
+      } else {
+        value = null;
+        meta = { ...(meta || {}), level_pct: null,
+          geometry: (geom && geom.height_mm != null) ? 'sin_offset' : 'a confirmar' };
+      }
+    }
+  }
+  return { value, meta };
+}
 
 /**
  * Ingest one gateway message. Steps:
@@ -58,7 +114,7 @@ export async function ingestMessage({ transport, gatewayRef, payload, log }) {
     let stored = 0, skipped = 0;
     for (const r of decoded.readings) {
       const sensor = await client.query(
-        `SELECT id, field_id FROM sensor WHERE gateway_id = $1 AND ext_ref = $2`,
+        `SELECT id, field_id, tank_ref, kind FROM sensor WHERE gateway_id = $1 AND ext_ref = $2`,
         [gw.gateway_id, r.sensorRef]
       );
       if (sensor.rowCount === 0) {
@@ -67,12 +123,15 @@ export async function ingestMessage({ transport, gatewayRef, payload, log }) {
         continue;
       }
       const s = sensor.rows[0];
+      // Finalize raw device measurements (counter→delta, distance→level %) against
+      // live config, keeping the raw value in reading.meta.
+      const { value, meta } = await finalizeReading(client, s, r);
       const ins = await client.query(
-        `INSERT INTO reading (ts, tenant_id, field_id, sensor_id, kind, value, battery, rssi, raw_msg_id)
-         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9)
+        `INSERT INTO reading (ts, tenant_id, field_id, sensor_id, kind, value, battery, rssi, meta, raw_msg_id)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
          ON CONFLICT (sensor_id, ts) DO NOTHING`,
         [r.ts || new Date(), gw.tenant_id, s.field_id, s.id, r.kind,
-         r.value, r.battery ?? null, r.rssi ?? null, rawMsgId]
+         value, r.battery ?? null, r.rssi ?? null, meta, rawMsgId]
       );
       stored += ins.rowCount;
       if (ins.rowCount === 0) skipped++;

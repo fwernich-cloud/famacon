@@ -1,9 +1,11 @@
 import crypto from 'node:crypto';
 
 // Signed, expiring session token (HMAC-SHA256 with APP_SECRET). No DB needed:
-// the cookie is self-contained and tamper-proof. 12h lifetime.
+// the cookie is self-contained and tamper-proof. 7-day lifetime (Hito 4 #6): the real use
+// is checking from a phone, at night, on bad signal, right after an alert — re-logging in at
+// that moment is friction that doesn't belong, so the session lasts about a week.
 const SECRET = process.env.APP_SECRET || 'dev-secret-change-me';
-const TTL_MS = 12 * 60 * 60 * 1000;
+const TTL_MS = 7 * 24 * 60 * 60 * 1000;
 
 export function signSession(user) {
   const payload = `${user}|${Date.now() + TTL_MS}`;

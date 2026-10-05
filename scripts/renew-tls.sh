@@ -11,3 +11,7 @@ docker run --rm \
 
 # Reload nginx so it picks up a renewed cert (no downtime).
 docker exec famacon-control-nginx-1 nginx -s reload 2>/dev/null || true
+
+# Restart mosquitto so its TLS listener (8883) reloads the renewed cert. Brief blip;
+# the gateways' Data Retransmission buffer covers the reconnect.
+docker restart famacon-control-mosquitto-1 2>/dev/null || true

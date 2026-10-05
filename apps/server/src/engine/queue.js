@@ -24,7 +24,9 @@ export function startWorkers(log) {
   const evalWorker = new Worker('evaluation', async (job) => {
     const { tenantId, fieldId } = job.data;
     const result = await evaluateField({ tenantId, fieldId, log });
-    if (result.opened.length && onAlerts) {
+    // Sweep dispatch on every evaluation (not only on new opens) so per-rule retry
+    // cadences fire as fresh data arrives; dispatch itself gates what actually sends.
+    if (onAlerts) {
       try { await onAlerts({ tenantId, fieldId, opened: result.opened }); }
       catch (err) { log?.error({ err: err.message }, 'alert dispatch hook failed'); }
     }
@@ -33,7 +35,9 @@ export function startWorkers(log) {
 
   const wdWorker = new Worker('watchdog', async () => {
     const r = await runWatchdog(log, async ({ tenantId, fieldId, opened }) => {
-      if (opened.length && onAlerts) {
+      // Sweep every field the watchdog touches (60s cadence) so both watchdog and
+      // rule alerts get their retry cadence even when no NEW alert opened.
+      if (onAlerts) {
         try { await onAlerts({ tenantId, fieldId, opened }); }
         catch (err) { log?.error({ err: err.message }, 'watchdog dispatch hook failed'); }
       }

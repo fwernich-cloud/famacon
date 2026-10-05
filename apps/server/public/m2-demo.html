@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Famacon Control — Demo del motor (Hito 2)</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+  :root { --navy:#0b1a2b; --accent:#2f80ed; --ink:#1a2230; --muted:#5b6675; --line:#e6e9ee; }
+  * { box-sizing:border-box; }
+  body { margin:0; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif; color:var(--ink); background:#f4f6f9; }
+  header { background:var(--navy); color:#fff; padding:22px 24px; border-bottom:3px solid var(--accent); }
+  header .eyebrow { font-size:11px; letter-spacing:.22em; text-transform:uppercase; color:#9fb4cc; }
+  header h1 { margin:4px 0 0; font-family:"Playfair Display",Georgia,serif; font-weight:700; font-size:26px; }
+  main { max-width:1040px; margin:0 auto; padding:28px 20px 56px; }
+  .frame { background:#000; border:1px solid var(--line); border-radius:4px; overflow:hidden; box-shadow:0 10px 40px rgba(11,26,43,.15); }
+  video { display:block; width:100%; height:auto; }
+  p.lead { color:var(--muted); font-size:16px; line-height:1.55; margin:22px 2px; }
+  .cta { display:inline-block; margin-top:8px; background:var(--accent); color:#fff; text-decoration:none;
+         font-weight:600; padding:13px 22px; border-radius:3px; }
+  .cta:hover { background:#2467c8; }
+  footer { color:var(--muted); font-size:13px; margin-top:34px; border-top:1px solid var(--line); padding-top:16px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="eyebrow">Famacon Control</div>
+  <h1>Demo del motor — Hito 2</h1>
+</header>
+<main>
+  <div class="frame">
+    <video controls playsinline preload="metadata" poster="/m2-demo-poster.jpg">
+      <source src="/m2-demo.mp4" type="video/mp4">
+      Tu navegador no reproduce el video. <a href="/m2-demo.mp4">Descargalo acá</a>.
+    </video>
+  </div>
+  <p class="lead">El sistema decidiendo cuándo avisar y cuándo quedarse callado (las tres situaciones),
+    el watchdog cuando un equipo deja de reportar, los avisos por WhatsApp, la comparación de los dos
+    sensores de nivel y el rendimiento del molino —lo que detecta el desgaste del cuero antes de que falle—.
+    Todo con datos reales entrando.</p>
+  <a class="cta" href="/dashboard.html?field=00000000-0000-0000-0000-00000000da01">Entrar al tablero en vivo →</a>
+  <footer>Famacon Control · uso interno de Famacon S.A.</footer>
+</main>
+</body>
+</html>

@@ -38,6 +38,25 @@ Qué revisar: {{3}}
 Params: {{1}} campo · {{2}} diagnóstico · {{3}} qué revisar. Mapping in
 `src/whatsapp/templates.js`.
 
+**`famacon_nuevo_lead`** (aviso de consulta web → Famacon; category UTILITY, es)
+```
+Nueva consulta en la web — {{1}}
+Tel: {{2}}
+{{3}}
+```
+Params: {{1}} nombre · {{2}} teléfono · {{3}} mensaje.
+
+### Example values (Meta requires one per placeholder at submission)
+Paste these as the sample values when creating each template, or the review bounces:
+| Template | {{1}} | {{2}} | {{3}} |
+|----------|-------|-------|-------|
+| `famacon_alerta_urgente` | Campo La Esperanza | Tanque TQ-01 bajando y sin reposición (molino y bomba parados). | Ir al equipo: no está reponiendo agua. |
+| `famacon_alerta_aviso` | Campo La Esperanza | Nivel del tanque TQ-02 bajo: 18%. | Revisar el equipo que llena el tanque. |
+| `famacon_nuevo_lead` | Juan Pérez | +54 9 11 5555 5555 | Quiero información para monitorear 3 molinos en Verónica. |
+
+Notes: no URLs/marketing in UTILITY bodies (keep them operational). Language `es`
+(or `es_AR`; must match the `language.code` the client sends — currently `es`).
+
 ## 4. Compliance (§6.5 / NFR5 Ley 25.326) — enforced
 - **No consent on file → no send.** Skips are logged in `wa_message`
   (`skipped_no_consent`) for the audit trail.

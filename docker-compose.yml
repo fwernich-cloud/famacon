@@ -40,8 +40,9 @@ services:
     volumes:
       - ./infra/mosquitto/config:/mosquitto/config:ro
       - mosquittodata:/mosquitto/data
+      - certbot-conf:/etc/letsencrypt:ro   # read the domain's LE cert for TLS on 8883
     ports:
-      - "1883:1883"   # MQTT — the field gateway connects here (auth required)
+      - "8883:8883"   # MQTT over TLS — the field gateways connect here (auth required); 1883 stays internal-only
     healthcheck:
       test: ["CMD-SHELL", "mosquitto_sub -h localhost -t '$$SYS/#' -C 1 -W 3 -u ${MQTT_USER} -P ${MQTT_PASSWORD} || exit 1"]
       interval: 30s
