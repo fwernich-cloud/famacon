@@ -1,9 +1,18 @@
 name: famacon-control
 
+# Cap container logs so an unbounded json log can't quietly fill the disk (Hito 5 hardening).
+# Each service keeps at most 3 × 10 MB of logs.
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
 services:
   postgres:
     image: timescale/timescaledb-ha:pg16
     restart: unless-stopped
+    logging: *default-logging
     environment:
       POSTGRES_DB: ${POSTGRES_DB}
       POSTGRES_USER: ${POSTGRES_USER}
@@ -25,6 +34,7 @@ services:
   redis:
     image: redis:7-alpine
     restart: unless-stopped
+    logging: *default-logging
     command: ["redis-server", "--appendonly", "yes", "--save", "60", "1"]
     volumes:
       - redisdata:/data
@@ -37,6 +47,7 @@ services:
   mosquitto:
     image: eclipse-mosquitto:2
     restart: unless-stopped
+    logging: *default-logging
     volumes:
       - ./infra/mosquitto/config:/mosquitto/config:ro
       - mosquittodata:/mosquitto/data
@@ -54,6 +65,7 @@ services:
       context: ./apps/server
       dockerfile: Dockerfile
     restart: unless-stopped
+    logging: *default-logging
     env_file: .env
     volumes:
       - ./apps/server/public:/app/public:ro
@@ -72,6 +84,7 @@ services:
   nginx:
     image: nginx:alpine
     restart: unless-stopped
+    logging: *default-logging
     depends_on:
       server: { condition: service_started }
     ports:
@@ -87,6 +100,7 @@ services:
       context: ./apps/simulator
       dockerfile: Dockerfile
     restart: "no"
+    logging: *default-logging
     profiles: ["sim"]        # opt-in: `docker compose --profile sim up simulator`
     env_file: .env
     depends_on:
