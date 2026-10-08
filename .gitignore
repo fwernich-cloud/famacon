@@ -17,5 +17,8 @@ infra/mosquitto/log/
 *.dump
 *.sql.gz
 
+# temporary proof/export files served from public (never in git)
+apps/server/public/pruebas-famacon-*.zip
+
 # os
 .DS_Store
